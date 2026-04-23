@@ -19,8 +19,18 @@ http://localhost:3000
 
 ```bash
 npm run build
-npm run start
+npm run preview
 ```
+
+## GitHub Pages 静态导出
+
+项目已配置为 `output: "export"`，执行 `npm run build` 后会生成可部署到 GitHub Pages 的静态目录：
+
+```text
+out/
+```
+
+GitHub Actions 工作流会自动把 `out/` 部署到 GitHub Pages。
 
 ## 后续替换支付链接
 
