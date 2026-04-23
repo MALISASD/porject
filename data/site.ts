@@ -23,7 +23,7 @@ export type ContactMethod = {
 export const siteConfig = {
   brand: "Long",
   studio: "by Long Studio",
-  url: "https://fdaicar.top",
+  url: "https://www.fdaicar.top",
   subtitle: "个人分享 / 学习笔记 / 小商店",
   heroTitle: "Long 的分享、学习与作品，在这里慢慢长成自己的样子。",
   heroDescription:
