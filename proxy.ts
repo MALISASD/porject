@@ -6,14 +6,16 @@ const primaryDomain = "www.fdaicar.top";
 
 export function proxy(request: NextRequest) {
   const host = request.headers.get("host");
+  const hostname = host?.split(":")[0];
 
-  if (!host || host !== apexDomain) {
+  if (!hostname || hostname !== apexDomain) {
     return NextResponse.next();
   }
 
   const redirectUrl = request.nextUrl.clone();
   redirectUrl.host = primaryDomain;
   redirectUrl.protocol = "https";
+  redirectUrl.port = "";
 
   return NextResponse.redirect(redirectUrl, 308);
 }
