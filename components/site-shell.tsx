@@ -80,7 +80,7 @@ export function SiteHeader() {
         </nav>
 
         <ButtonLink href="/shop" variant="secondary">
-          进入商店
+          打开惊喜
         </ButtonLink>
       </div>
     </header>
@@ -99,9 +99,9 @@ export function SiteFooter() {
         </div>
 
         <div className="footer-links">
-          <Link href="/posts">分享</Link>
-          <Link href="/learn">学习</Link>
-          <Link href="/shop">商店</Link>
+          <Link href="/posts">想说的话</Link>
+          <Link href="/learn">未来计划</Link>
+          <Link href="/shop">小惊喜</Link>
           <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>
         </div>
       </div>
