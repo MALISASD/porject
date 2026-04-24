@@ -4,8 +4,8 @@ import { ButtonLink, ContentCard, PageHero } from "@/components/site-shell";
 import { posts } from "@/data/site";
 
 export const metadata: Metadata = {
-  title: "分享",
-  description: "Long 的分享列表页，展示个人观点、经验复盘与内容输出。",
+  title: "想说的话",
+  description: "写给琳宝的几句真心话，把没说完的喜欢认真展开。",
   alternates: {
     canonical: "/posts"
   }
@@ -15,14 +15,14 @@ export default function PostsPage() {
   return (
     <>
       <PageHero
-        eyebrow="分享"
-        title="把阶段性的思考整理成可以反复阅读的内容"
-        description="这里收纳品牌、内容策略、网站结构和个人工作方式相关的分享。当前先用示例卡片占位，后续可以继续扩成独立文章页。"
+        eyebrow="想说的话"
+        title="如果喜欢可以慢慢讲，我想把每一句都讲给你听"
+        description="有些话平时会害羞，有些话见到你会忘词，所以我先把它们安安稳稳写在这里。不是为了炫耀喜欢，而是想让你知道，你真的被我放在很重要的位置。"
         actions={
           <>
-            <ButtonLink href="/">返回首页</ButtonLink>
+            <ButtonLink href="/">回到首页</ButtonLink>
             <ButtonLink href="/contact" variant="secondary">
-              联系我
+              看最后落款
             </ButtonLink>
           </>
         }

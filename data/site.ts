@@ -21,137 +21,131 @@ export type ContactMethod = {
 };
 
 export const siteConfig = {
-  brand: "Long",
-  studio: "by Long Studio",
+  brand: "琳宝",
+  studio: "from Long",
   url: "https://www.fdaicar.top",
-  subtitle: "个人分享 / 学习笔记 / 小商店",
-  heroTitle: "Long 的分享、学习与作品，在这里慢慢长成自己的样子。",
+  subtitle: "写给你的一封线上情书",
+  heroTitle: "琳宝，我把想对你说的话，认真做成了一个只送给你的网站。",
   heroDescription:
-    "这是一个为个人内容、长期学习与轻量成交准备的品牌站首版。它先把页面、访问与托管支付的链路跑通，后续再逐步扩展内容和商品。",
-  email: "hello@fdaicar.top",
+    "本来只是想给你准备一个小惊喜，后来发现最想放进去的，不是页面，不是按钮，而是我每一次想起你时心里那种很笃定的喜欢。",
+  email: "linbao@fdaicar.top",
   meta: {
-    title: "Long | by Long Studio",
+    title: "琳宝，我喜欢你",
     description:
-      "Long 的个人品牌站，聚合个人分享、学习笔记与轻量小商店，支持后续接入 Stripe 托管支付。"
+      "这是 Long 写给琳宝的一封线上情书，里面有心动、想念、小惊喜，还有想陪你走很久很久的认真。"
   }
 };
 
 export const navigation: NavItem[] = [
-  { label: "关于我", href: "/#about" },
-  { label: "流程", href: "/#workflow" },
-  { label: "分享", href: "/posts" },
-  { label: "学习", href: "/learn" },
-  { label: "商店", href: "/shop" },
-  { label: "联系", href: "/contact" }
+  { label: "写给你", href: "/#about" },
+  { label: "心动瞬间", href: "/#moments" },
+  { label: "想说的话", href: "/posts" },
+  { label: "未来计划", href: "/learn" },
+  { label: "小惊喜", href: "/shop" },
+  { label: "最后落款", href: "/contact" }
 ];
 
 export const workflowSteps = [
   {
-    title: "1. 发布页面",
-    description: "把内容、服务或商品整理成清楚的一页，让用户能快速理解你提供的价值。"
+    title: "第一次心动",
+    description: "从第一次认真看向你开始，我就知道，你和别人是不一样的。"
   },
   {
-    title: "2. 用户访问",
-    description: "通过分享链接、社交平台或自然搜索，把访问者稳定引导到站点与对应的内容页。"
+    title: "越来越确定",
+    description: "和你相处越久，我越确定自己想把温柔、偏爱和耐心都给你。"
   },
   {
-    title: "3. 跳转支付",
-    description: "点击商品按钮后进入第三方托管支付页，完成支付，再返回成功页继续后续沟通。"
+    title: "想走很久",
+    description: "我不只想短暂地喜欢你，我想陪你把许多平凡日子都过成小小纪念日。"
   }
 ];
 
 export const posts: ContentItem[] = [
   {
-    title: "为什么个人网站值得长期维护",
-    description: "从内容资产、品牌沉淀到转化效率，整理一套适合个人经营的站点思路。",
-    meta: "个人分享 · 品牌思考",
+    title: "我最喜欢你笑起来的样子",
+    description: "那种轻轻一笑就能把一天的疲惫都赶走的魔法，我每次都心甘情愿中招。",
+    meta: "想对你说的话",
     href: "/posts",
-    cta: "查看分享"
+    cta: "继续看下去"
   },
   {
-    title: "我如何把零散输出整理成稳定栏目",
-    description: "把灵感、案例、经验和服务拆成可复用模块，降低后续维护成本。",
-    meta: "内容体系 · 输出流程",
+    title: "你出现以后，很多事情都变得柔软了",
+    description: "原来真的会因为一个人，开始期待清晨、晚风、散步和每一次普通的见面。",
+    meta: "认真喜欢",
     href: "/posts",
-    cta: "进入列表"
+    cta: "我还想说"
   },
   {
-    title: "一个小而稳的个人站首页应该讲清什么",
-    description: "先讲你是谁、做什么、如何合作，再讲更复杂的产品细节。",
-    meta: "网站结构 · 首版策略",
+    title: "我想把偏爱写得很明确",
+    description: "不是随口一说的喜欢，而是想一次次站到你这边、哄你、护着你、陪着你的那种喜欢。",
+    meta: "偏爱声明",
     href: "/posts",
-    cta: "继续阅读"
+    cta: "收下这句"
   }
 ];
 
 export const learnItems: ContentItem[] = [
   {
-    title: "Next.js App Router 搭站笔记",
-    description: "记录从项目初始化、路由设计到页面结构拆分的一套轻量实践。",
-    meta: "学习笔记 · Web 开发",
+    title: "想和你一起学会把日子过得更浪漫",
+    description: "一起看展、散步、拍照、去吃喜欢的东西，把平常的一天过成值得记住的一天。",
+    meta: "未来计划",
     href: "/learn",
-    cta: "查看笔记"
+    cta: "看看计划"
   },
   {
-    title: "如何为个人站预留 Stripe Payment Link",
-    description: "不做重后端，也能先把支付通路留出来，先验证需求再加复杂度。",
-    meta: "支付流程 · 站点扩展",
+    title: "想和你一起把小日常过成长长的故事",
+    description: "从今天想吃什么，到明年去哪里看海，我都想把你放进我的以后里。",
+    meta: "关于以后",
     href: "/learn",
-    cta: "查看方法"
+    cta: "继续往后看"
   },
   {
-    title: "把教程、资源和复盘放进一个学习页",
-    description: "通过统一结构整理知识沉淀，让内容更容易被自己和他人重新使用。",
-    meta: "知识整理 · 学习系统",
+    title: "想慢慢学会更好地爱你",
+    description: "学会更耐心一点，更细心一点，更坚定一点，让你被喜欢这件事感受得清清楚楚。",
+    meta: "认真爱你",
     href: "/learn",
-    cta: "打开学习区"
+    cta: "这是我的答案"
   }
 ];
 
 export const products: ContentItem[] = [
   {
-    title: "个人品牌页诊断",
-    description: "适合想梳理定位、文案与页面结构的人，帮助你先把展示与转化链路理顺。",
-    meta: "轻咨询 · 45 分钟",
-    href: "https://example.com/replace-with-stripe-payment-link/brand-review",
-    cta: "立即购买",
-    external: true
+    title: "给琳宝的抱抱券",
+    description: "无限次使用，不限时间，不限场景，只要你想要，我就张开手等你过来。",
+    meta: "小惊喜",
+    href: "/success",
+    cta: "收下抱抱券"
   },
   {
-    title: "落地页文案框架",
-    description: "一份可以直接复用的页面信息结构模板，帮助你更快搭好个人或服务页面。",
-    meta: "数字产品 · 模板",
-    href: "https://example.com/replace-with-stripe-payment-link/landing-copy",
-    cta: "立即查看",
-    external: true
+    title: "一起去吃好吃的预约单",
+    description: "你点地方，我负责出现。火锅、烧烤、甜品还是夜宵，我都陪你去。",
+    meta: "约会计划",
+    href: "/success",
+    cta: "确认这份惊喜"
   },
   {
-    title: "内容发布流程清单",
-    description: "把选题、整理、发布、复盘和转化动作串成一条更稳定的个人工作流。",
-    meta: "数字产品 · 清单",
-    href: "https://example.com/replace-with-stripe-payment-link/content-playbook",
-    cta: "立即购买",
-    external: true
+    title: "长期陪伴使用权",
+    description: "这份礼物没有截止日期，我想给你的，是很长很长时间里的偏爱和陪伴。",
+    meta: "终身有效",
+    href: "/success",
+    cta: "我愿意收下"
   }
 ];
 
 export const contactMethods: ContactMethod[] = [
   {
-    title: "邮箱",
-    value: siteConfig.email,
-    note: "适合商务合作、项目咨询与支付后续沟通。",
-    href: `mailto:${siteConfig.email}`
+    title: "第一句落款",
+    value: "琳宝，我真的很喜欢你。",
+    note: "不是一时兴起，也不是随口说说，是认真、郑重、想让你知道的那种喜欢。"
   },
   {
-    title: "微信",
-    value: "LongStudio",
-    note: "这里先放占位微信号，后续可以替换成你的实际联系方式。"
+    title: "第二句落款",
+    value: "如果你愿意，我想继续一直对你好。",
+    note: "想在你开心的时候陪你更开心，也想在你累的时候第一个抱抱你。"
   },
   {
-    title: "社交主页",
-    value: "github.com/replace-this-with-your-handle",
-    note: "建议替换成你的 GitHub、X 或其他主要社交主页。",
-    href: "https://github.com/replace-this-with-your-handle",
-    external: true
+    title: "第三句落款",
+    value: "看完这页以后，能不能让我亲口再说一遍给你听。",
+    note: "这次网站先替我开口，下一次我想站在你面前，认真叫你一声琳宝。"
   }
 ];

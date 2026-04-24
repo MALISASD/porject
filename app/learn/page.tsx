@@ -4,8 +4,8 @@ import { ButtonLink, ContentCard, PageHero } from "@/components/site-shell";
 import { learnItems } from "@/data/site";
 
 export const metadata: Metadata = {
-  title: "学习",
-  description: "Long 的学习列表页，用于整理教程、笔记、方法与资源。",
+  title: "未来计划",
+  description: "想和琳宝一起完成的小愿望、小安排和很长很长的以后。",
   alternates: {
     canonical: "/learn"
   }
@@ -15,14 +15,14 @@ export default function LearnPage() {
   return (
     <>
       <PageHero
-        eyebrow="学习"
-        title="把学过的东西沉淀下来，未来就更容易复用"
-        description="学习页用来整理笔记、教程和资源。当前首版保持简单，先让结构可读、路径可扩展，后续可再接入 MDX 或 CMS。"
+        eyebrow="未来计划"
+        title="如果你愿意，我想把以后很多平凡的日子都和你一起过"
+        description="不是很夸张的承诺，而是我真的会认真期待的事。一起吃饭、一起看电影、一起散步、一起把一些普通日子过得亮晶晶。"
         actions={
           <>
-            <ButtonLink href="/">返回首页</ButtonLink>
-            <ButtonLink href="/posts" variant="secondary">
-              去看分享
+            <ButtonLink href="/">回到首页</ButtonLink>
+            <ButtonLink href="/shop" variant="secondary">
+              看给你的惊喜
             </ButtonLink>
           </>
         }

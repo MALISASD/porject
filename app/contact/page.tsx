@@ -4,8 +4,8 @@ import { ButtonLink, PageHero } from "@/components/site-shell";
 import { contactMethods } from "@/data/site";
 
 export const metadata: Metadata = {
-  title: "联系",
-  description: "Long 的联系页，展示邮箱、微信与社交方式。",
+  title: "最后落款",
+  description: "写给琳宝的最后几句落款，也是最想亲口说的话。",
   alternates: {
     canonical: "/contact"
   }
@@ -15,14 +15,14 @@ export default function ContactPage() {
   return (
     <>
       <PageHero
-        eyebrow="联系"
-        title="如果你想聊合作、咨询或支付后的下一步"
-        description="当前站点不接复杂后端，所以联系页保持直接。你可以先通过邮箱沟通，再逐步补充表单、自动回复或更完整的客户入口。"
+        eyebrow="最后落款"
+        title="写到这里，我还是最想认真叫你一声：琳宝"
+        description="这大概是我能想到最郑重又不太打扰你的表达方式。可如果你愿意，我想下一次不隔着页面，而是站在你面前，把这些话亲口说给你听。"
         actions={
           <>
-            <ButtonLink href="/">返回首页</ButtonLink>
-            <ButtonLink href="/shop" variant="secondary">
-              去看商店
+            <ButtonLink href="/">回到首页</ButtonLink>
+            <ButtonLink href="/success" variant="secondary">
+              收下这份心意
             </ButtonLink>
           </>
         }
@@ -36,18 +36,6 @@ export default function ContactPage() {
                 <p className="card-meta">{method.title}</p>
                 <h3>{method.value}</h3>
                 <p>{method.note}</p>
-                {method.href ? (
-                  <div className="card-actions">
-                    <a
-                      className="button-link button-ghost"
-                      href={method.href}
-                      rel={method.external ? "noreferrer" : undefined}
-                      target={method.external ? "_blank" : undefined}
-                    >
-                      立即联系
-                    </a>
-                  </div>
-                ) : null}
               </article>
             ))}
           </div>
