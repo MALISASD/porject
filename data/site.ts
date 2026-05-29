@@ -20,29 +20,206 @@ export type ContactMethod = {
   external?: boolean;
 };
 
+export type HomeMemory = {
+  title: string;
+  description: string;
+  meta: string;
+  featured?: boolean;
+  image?: string;
+  note?: string;
+};
+
+export type HomeTimelineItem = {
+  date: string;
+  text: string;
+  title?: string;
+};
+
+export type DailyCoupon = {
+  title: string;
+  description: string;
+  actionLabel: string;
+  message: string;
+  meta: string;
+};
+
+export type MysteryPrize = {
+  title: string;
+  description: string;
+};
+
 export const siteConfig = {
   brand: "琳宝",
   studio: "from Long",
   url: "https://www.fdaicar.top",
-  subtitle: "写给你的一封线上情书",
-  heroTitle: "琳宝，我把想对你说的话，认真做成了一个只送给你的网站。",
-  heroDescription:
-    "本来只是想给你准备一个小惊喜，后来发现最想放进去的，不是页面，不是按钮，而是我每一次想起你时心里那种很笃定的喜欢。",
+  subtitle: "专属互动礼物盒",
+  heroTitle: "琳宝的专属礼物盒",
+  heroDescription: "里面有一点好运，一点偏爱，还有很多我想给你的开心。",
   email: "linbao@fdaicar.top",
   meta: {
-    title: "琳宝，我喜欢你",
+    title: "琳宝的专属礼物盒",
     description:
-      "这是 Long 写给琳宝的一封线上情书，里面有心动、想念、小惊喜，还有想陪你走很久很久的认真。"
+      "这是 Long 给琳宝准备的专属互动礼物盒，里面有好运、小券、神秘礼物和认真记住的时间线。"
   }
 };
 
 export const navigation: NavItem[] = [
-  { label: "写给你", href: "/#about" },
-  { label: "心动瞬间", href: "/#moments" },
-  { label: "想说的话", href: "/posts" },
-  { label: "未来计划", href: "/learn" },
-  { label: "小惊喜", href: "/shop" },
-  { label: "最后落款", href: "/contact" }
+  { label: "封面", href: "/#cover" },
+  { label: "彩票", href: "/#lottery" },
+  { label: "小券", href: "/#coupons" },
+  { label: "礼盒", href: "/#mystery" },
+  { label: "时间线", href: "/#timeline" },
+  { label: "落款", href: "/#signature" }
+];
+
+export const homeLetter =
+  "我把一些想对你说的话，还有一些我偷偷记住的小心思，做成了这个只送给你的小网站。";
+
+export const homeMemories: HomeMemory[] = [
+  {
+    title: "初三那天，见到你",
+    description:
+      "2024 年大年初三，本来只是一次相亲见面。可那天之后，我开始觉得，有些相遇不是刚刚好，是后来想起来，才知道它很重要。",
+    meta: "chapter 01"
+  },
+  {
+    title: "那场北京的大雪",
+    description:
+      "那天从北京去上海，出发去机场的时候，外面下着很大的雪。我坐在出租车里，拉着你的手，看着窗外的雪一点点落下来。飞机晚点，我们凌晨三点才到上海。可我现在想起来，记住的不是等待有多晚，是那一路上，你在我身边。",
+    meta: "chapter 02",
+    featured: true,
+    image: "/snow-night-taxi-memory.jpg",
+    note: "北京下雪的那晚，我记得很清楚。"
+  },
+  {
+    title: "后来开始觉得，有你真好",
+    description:
+      "后来有很多普通的小瞬间，不一定多热烈，却让我慢慢确定：如果以后的很多路，都能和你一起走，那应该会是一件很好的事。",
+    meta: "chapter 03"
+  }
+];
+
+export const homeTimeline = {
+  title: "从初三，到初十",
+  items: [
+    {
+      date: "2024 年大年初三",
+      text: "我们第一次相亲见面。"
+    },
+    {
+      date: "那场北京的大雪",
+      text: "从北京去上海的那晚，出租车里，我拉着你的手，外面下着很大的雪，飞机晚点，我们凌晨三点才到上海。"
+    },
+    {
+      date: "2025 年大年初十",
+      text: "我们结婚了。"
+    }
+  ] satisfies HomeTimelineItem[],
+  ending: "中间隔着一整年的春夏秋冬，最后你真的成了我的家人。"
+};
+
+export const dailyCoupons: DailyCoupon[] = [
+  {
+    title: "抱抱兑换券",
+    description:
+      "可在想撒娇、想耍赖、想被哄、想被抱住的时候使用。长期有效，不限次数。",
+    actionLabel: "立即使用",
+    message: "抱抱申请已提交，请 Long 立刻执行。",
+    meta: "daily coupon"
+  },
+  {
+    title: "好吃的预约单",
+    description:
+      "火锅、烤肉、甜品、夜宵、想吃什么都可以。琳宝负责点菜，Long 负责安排。",
+    actionLabel: "预约一顿好吃的",
+    message: "预约成功，请告诉 Long：时间、地点、想吃什么。",
+    meta: "dinner note"
+  },
+  {
+    title: "陪你做小事券",
+    description: "可以用于逛街、散步、看电影、发呆、聊天、一起浪费时间。",
+    actionLabel: "领取这张",
+    message: "这张已经属于你了，随时可以找 Long 兑现。",
+    meta: "quiet time"
+  }
+];
+
+export const mysteryBoxes = ["暖暖盒", "好运盒", "好吃盒", "快乐盒", "神秘盒"];
+
+export const mysteryPrizes: MysteryPrize[] = [
+  {
+    title: "52 元红包",
+    description: "一份小小心意，今天就可以找 Long 领取。"
+  },
+  {
+    title: "66 元红包",
+    description: "愿今天的开心顺顺利利。"
+  },
+  {
+    title: "88 元红包",
+    description: "好运和偏爱都给你。"
+  },
+  {
+    title: "火锅一顿",
+    description: "你负责想吃哪家，我负责安排。"
+  },
+  {
+    title: "奶茶和甜品",
+    description: "甜的给你，开心也给你。"
+  },
+  {
+    title: "电影约会一次",
+    description: "选一部你想看的电影，我们一起去。"
+  },
+  {
+    title: "抱抱无限次",
+    description: "不限时间，不限次数，长期有效。"
+  },
+  {
+    title: "今天你最大",
+    description: "今天所有小脾气都优先被照顾。"
+  },
+  {
+    title: "神秘礼物预约权",
+    description: "礼物内容暂不公开，但 Long 会认真准备。"
+  },
+  {
+    title: "游戏机愿望基金",
+    description: "Long 会认真评估预算，并优先纳入家庭快乐计划。"
+  },
+  {
+    title: "笔记本电脑愿望基金",
+    description: "这是一份高级愿望卡，我们可以一起认真规划。"
+  },
+  {
+    title: "Long 的爱永久有效",
+    description: "这个不用抽，本来就是你的。"
+  }
+];
+
+export const homeGiftCards: ContentItem[] = [
+  {
+    title: "抱抱兑换券",
+    description: "可在你想撒娇、想耍赖、想被哄的时候使用。长期有效，不限次数。",
+    meta: "gift ticket",
+    href: "/success",
+    cta: "收下这张"
+  },
+  {
+    title: "一起去吃好吃的预约单",
+    description:
+      "适用于想吃火锅、烤肉、甜品、夜宵以及突然嘴馋的时候。我负责陪你去，也负责陪你开心。",
+    meta: "dinner pass",
+    href: "/success",
+    cta: "预约一下"
+  },
+  {
+    title: "长期陪伴使用权",
+    description: "这一张不是限时体验卡，是我认真想给你的长期版本。",
+    meta: "long-term",
+    href: "/success",
+    cta: "确认收下"
+  }
 ];
 
 export const workflowSteps = [

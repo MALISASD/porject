@@ -79,8 +79,8 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <ButtonLink href="/shop" variant="secondary">
-          打开惊喜
+        <ButtonLink href="/#lottery" variant="secondary">
+          打开礼物
         </ButtonLink>
       </div>
     </header>
@@ -99,9 +99,10 @@ export function SiteFooter() {
         </div>
 
         <div className="footer-links">
-          <Link href="/posts">想说的话</Link>
-          <Link href="/learn">未来计划</Link>
-          <Link href="/shop">小惊喜</Link>
+          <Link href="/#lottery">彩票</Link>
+          <Link href="/#coupons">小券</Link>
+          <Link href="/#mystery">礼盒</Link>
+          <Link href="/#timeline">时间线</Link>
           <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>
         </div>
       </div>

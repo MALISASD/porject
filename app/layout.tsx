@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     template: `%s | ${siteConfig.brand}`
   },
   description: siteConfig.meta.description,
-  keywords: ["琳宝", "表白网站", "情书", "Long", "love letter", "GitHub Pages"],
+  keywords: ["琳宝", "礼物网站", "回忆", "Long", "GitHub Pages"],
   alternates: {
     canonical: "/"
   },
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="zh-CN">
+    <html lang="zh-CN" data-scroll-behavior="smooth">
       <body>
         <div className="site-bg" />
         <div className="site-frame">

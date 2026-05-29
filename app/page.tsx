@@ -1,152 +1,320 @@
-import { ButtonLink, ContentCard, SectionHeading } from "@/components/site-shell";
-import { learnItems, posts, products, siteConfig, workflowSteps } from "@/data/site";
+"use client";
+
+import { useEffect, useState } from "react";
+
+import { ButtonLink } from "@/components/site-shell";
+import {
+  dailyCoupons,
+  homeTimeline,
+  mysteryBoxes,
+  mysteryPrizes,
+  siteConfig
+} from "@/data/site";
+
+type MysteryResult = {
+  box: string;
+  title: string;
+  description: string;
+};
+
+const LOTTERY_KEY = "linbao-giftbox-lottery";
+const MYSTERY_KEY = "linbao-giftbox-mystery";
+
+function getGiftStorage() {
+  if (typeof window === "undefined" || !window.localStorage) {
+    return null;
+  }
+
+  return window.localStorage;
+}
+
+function readStoredNumber(key: string) {
+  const storage = getGiftStorage();
+  if (!storage) {
+    return null;
+  }
+
+  const value = storage.getItem(key);
+  return value ? Number(value) : null;
+}
+
+function readStoredMystery() {
+  const storage = getGiftStorage();
+  if (!storage) {
+    return null;
+  }
+
+  const value = storage.getItem(MYSTERY_KEY);
+  if (!value) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(value) as MysteryResult;
+  } catch {
+    storage.removeItem(MYSTERY_KEY);
+    return null;
+  }
+}
 
 export default function HomePage() {
+  const [lotteryAmount, setLotteryAmount] = useState<number | null>(null);
+  const [isReady, setIsReady] = useState(false);
+  const [couponMessage, setCouponMessage] = useState<string | null>(null);
+  const [mysteryResult, setMysteryResult] = useState<MysteryResult | null>(null);
+  const [openingBox, setOpeningBox] = useState<string | null>(null);
+
+  useEffect(() => {
+    setLotteryAmount(readStoredNumber(LOTTERY_KEY));
+    setMysteryResult(readStoredMystery());
+    setIsReady(true);
+  }, []);
+
+  function drawLottery() {
+    if (lotteryAmount !== null) {
+      return;
+    }
+
+    const amount = Math.floor(Math.random() * 100) + 1;
+    getGiftStorage()?.setItem(LOTTERY_KEY, String(amount));
+    setLotteryAmount(amount);
+  }
+
+  function openMysteryBox(box: string) {
+    if (mysteryResult || openingBox) {
+      return;
+    }
+
+    const prize = mysteryPrizes[Math.floor(Math.random() * mysteryPrizes.length)];
+    const result = {
+      box,
+      title: prize.title,
+      description: prize.description
+    };
+
+    getGiftStorage()?.setItem(MYSTERY_KEY, JSON.stringify(result));
+    setOpeningBox(box);
+
+    window.setTimeout(() => {
+      setMysteryResult(result);
+      setOpeningBox(null);
+    }, 460);
+  }
+
+  const selectedBox = mysteryResult?.box ?? openingBox;
+
   return (
-    <>
-      <section className="hero-home">
-        <div className="shell hero-grid">
-          <div className="hero-copy">
-            <p className="eyebrow">{siteConfig.brand}</p>
-            <p className="hero-kicker">
-              {siteConfig.studio} · {siteConfig.subtitle}
-            </p>
+    <div className="home-page giftbox-page">
+      <section className="home-screen giftbox-cover" id="cover">
+        <div className="shell cover-layout">
+          <div className="cover-copy">
+            <p className="eyebrow">for my linbao</p>
             <h1>{siteConfig.heroTitle}</h1>
-            <p className="lead-copy">{siteConfig.heroDescription}</p>
-
+            <p className="cover-subtitle">{siteConfig.heroDescription}</p>
             <div className="button-row">
-              <ButtonLink href="/#posts-preview">先看我想说的话</ButtonLink>
-              <ButtonLink href="/#shop-preview" variant="secondary">
-                再看给你的小惊喜
-              </ButtonLink>
+              <ButtonLink href="/#lottery">打开礼物</ButtonLink>
             </div>
           </div>
 
-          <aside className="hero-panel">
-            <div className="hero-stat">
-              <span>想告诉你</span>
-              <strong>你是我想认真偏爱、认真珍惜、认真写进以后的人。</strong>
+          <div className="cover-giftbox" aria-hidden="true">
+            <div className="cover-giftbox-lid" />
+            <div className="cover-giftbox-body">
+              <span className="cover-giftbox-ribbon" />
+              <span className="cover-giftbox-card">L</span>
             </div>
-            <div className="hero-stat">
-              <span>这个网站</span>
-              <strong>不是作品集，也不是商店，而是一份只想送给琳宝的小小心意。</strong>
-            </div>
-            <div className="hero-stat">
-              <span>最后的答案</span>
-              <strong>如果非要把所有话缩成一句，那就是：琳宝，我真的很喜欢你。</strong>
-            </div>
-          </aside>
+          </div>
         </div>
       </section>
 
-      <section className="section-block" id="moments">
-        <div className="shell">
-          <SectionHeading
-            eyebrow="心动瞬间"
-            title="我喜欢你，不是一瞬间，是一遍又一遍确定下来的事"
-            description="有些喜欢不是轰轰烈烈，而是看见你、想到你、靠近你时，心里总会轻轻发亮。"
-          />
+      <section className="home-screen lottery-screen" id="lottery">
+        <div className="shell lottery-layout">
+          <div className="home-section-heading">
+            <p className="eyebrow">lucky ticket</p>
+            <h2>今日幸运彩票</h2>
+            <p>抽到多少就是多少，100 元以内 Long 负责兑现。</p>
+          </div>
 
-          <div className="card-grid card-grid-3">
-            {workflowSteps.map((step) => (
-              <ContentCard
-                key={step.title}
-                title={step.title}
-                description={step.description}
-              />
+          <article className={`lottery-card${lotteryAmount ? " is-revealed" : ""}`}>
+            <div className="lottery-stub">
+              <span>gift no. 2025</span>
+              <strong>Linbao Only</strong>
+            </div>
+            <div className="lottery-main">
+              <p className="card-meta">today's lucky amount</p>
+              <div className="lottery-amount">
+                {lotteryAmount ? `¥${lotteryAmount}` : "¥--"}
+              </div>
+              <p className="lottery-result">
+                {lotteryAmount
+                  ? `琳宝今日幸运金额：¥${lotteryAmount}`
+                  : "轻轻点一下，今天的小好运就会出现。"}
+              </p>
+              <button
+                className="button-link button-primary"
+                disabled={!isReady || lotteryAmount !== null}
+                onClick={drawLottery}
+                type="button"
+              >
+                {lotteryAmount ? "本次礼物已抽取" : "抽一张彩票"}
+              </button>
+              <p className="lottery-rule">本次礼物只抽一次，刷新后结果也会保留。</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section className="home-screen coupon-screen" id="coupons">
+        <div className="shell">
+          <div className="home-section-heading">
+            <p className="eyebrow">daily coupons</p>
+            <h2>一些随时可以使用的小权利</h2>
+          </div>
+
+          <div className="coupon-grid">
+            {dailyCoupons.map((coupon) => (
+              <article className="daily-coupon" key={coupon.title}>
+                <div>
+                  <p className="card-meta">{coupon.meta}</p>
+                  <h3>{coupon.title}</h3>
+                  <p>{coupon.description}</p>
+                </div>
+                <button
+                  className="button-link button-ghost"
+                  onClick={() => setCouponMessage(coupon.message)}
+                  type="button"
+                >
+                  {coupon.actionLabel}
+                </button>
+              </article>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="section-block" id="about">
+      <section className="home-screen mystery-screen" id="mystery">
         <div className="shell">
-          <SectionHeading
-            eyebrow="写给你"
-            title="如果喜欢可以被好好表达，那我想把这份喜欢写得很清楚"
-            description="所以我没有只发一句消息，而是想认认真真做一个页面，把那些平时没说完的话一点点交给你。"
-          />
+          <div className="home-section-heading">
+            <p className="eyebrow">mystery box</p>
+            <h2>请选择一个神秘礼物盒</h2>
+            <p>每个盒子里都有一份不同的惊喜。本次礼物只允许开启一次神秘盒。</p>
+          </div>
 
-          <div className="feature-panel">
+          <div className="mystery-grid">
+            {mysteryBoxes.map((box) => (
+              <button
+                className={`mystery-box${selectedBox === box ? " is-selected" : ""}${
+                  openingBox === box ? " is-opening" : ""
+                }`}
+                disabled={mysteryResult !== null || openingBox !== null}
+                key={box}
+                onClick={() => openMysteryBox(box)}
+                type="button"
+              >
+                <span className="mystery-box-lid" />
+                <span className="mystery-box-body">
+                  <span>{box}</span>
+                </span>
+              </button>
+            ))}
+          </div>
+
+          <article className={`mystery-result${mysteryResult ? " is-visible" : ""}`}>
+            {mysteryResult ? (
+              <>
+                <p className="card-meta">{mysteryResult.box} opened</p>
+                <h3>{mysteryResult.title}</h3>
+                <p>{mysteryResult.description}</p>
+              </>
+            ) : (
+              <>
+                <p className="card-meta">waiting for linbao</p>
+                <h3>礼物还在盒子里</h3>
+                <p>选一个顺眼的盒子，轻轻打开就好。</p>
+              </>
+            )}
+          </article>
+        </div>
+      </section>
+
+      <section className="home-screen timeline-screen" id="timeline">
+        <div className="shell timeline-layout">
+          <div className="home-section-heading">
+            <p className="eyebrow">our timeline</p>
+            <h2>{homeTimeline.title}</h2>
+          </div>
+
+          <article className="timeline-keepsake timeline-story">
+            <div className="timeline-line">
+              {homeTimeline.items.map((item) => (
+                <div className="timeline-item" key={item.date}>
+                  <span className="timeline-dot" aria-hidden="true" />
+                  <div>
+                    <p className="timeline-date">{item.date}</p>
+                    <p>{item.text}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="timeline-side">
+              <div className="timeline-photo">
+                <img
+                  alt="北京雪夜去机场路上的出租车暖光回忆"
+                  src="/snow-night-taxi-memory.jpg"
+                />
+              </div>
+              <p className="timeline-ending">
+                中间隔着一整年的春夏秋冬，
+                <br />
+                最后你真的成了我的家人。
+              </p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section className="home-screen signature-screen" id="signature">
+        <div className="shell signature-layout">
+          <article className="signature-note">
             <p>
-              琳宝，这个网站没有复杂功能，也没有什么花哨目的。它只是想替我认真开口，告诉你：我喜欢和你说话，喜欢看你笑，喜欢想到未来时里面有你。
+              这些礼物有的很小，有的以后慢慢兑现。
+              <br />
+              但有一件事不用抽，也不用等：
+              <br />
+              我会一直认真爱你。
             </p>
-            <p>
-              如果你看到这里，就当我已经站在你面前，把那些本来会紧张得说不完整的话，终于一字一句讲清楚了。
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section className="section-block" id="posts-preview">
-        <div className="shell">
-          <SectionHeading
-            eyebrow="想说的话"
-            title="有些喜欢，我想一条一条讲给你听"
-            description="不是漂亮话，而是每次想起你时，心里最真实的反应。"
-          />
-
-          <div className="card-grid card-grid-3">
-            {posts.map((item) => (
-              <ContentCard key={item.title} {...item} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="section-block" id="learn-preview">
-        <div className="shell">
-          <SectionHeading
-            eyebrow="未来计划"
-            title="如果你愿意，我想把以后也一点点写上你的名字"
-            description="一起吃饭、一起出门、一起散步、一起变得更好，这些普通又浪漫的小事，我都想和你一起。"
-          />
-
-          <div className="card-grid card-grid-3">
-            {learnItems.map((item) => (
-              <ContentCard key={item.title} {...item} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="section-block" id="shop-preview">
-        <div className="shell">
-          <SectionHeading
-            eyebrow="小惊喜"
-            title="给琳宝准备的三份小小心意"
-            description="它们不是真的商品，而是我很想认真交到你手里的偏爱。"
-          />
-
-          <div className="card-grid card-grid-3">
-            {products.map((item) => (
-              <ContentCard key={item.title} {...item} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="section-block" id="contact">
-        <div className="shell contact-panel">
-          <SectionHeading
-            eyebrow="最后落款"
-            title="看完这一页以后，我还是最想亲口告诉你"
-            description="网站可以先替我把喜欢说出来，但最想要的那句回应，我还是想看着你的眼睛听。"
-          />
-
-          <div className="contact-cta">
-            <a className="contact-email" href="/contact">
-              琳宝，我喜欢你。
-            </a>
-            <div className="button-row">
-              <ButtonLink href="/contact" variant="secondary">
-                看最后的落款
-              </ButtonLink>
-              <ButtonLink href="/success">收下这份心意</ButtonLink>
+            <div className="signature-mark">
+              <strong>Long</strong>
+              <span>写给我的老婆琳宝</span>
             </div>
-          </div>
+          </article>
         </div>
       </section>
-    </>
+
+      {couponMessage ? (
+        <div
+          className="modal-backdrop"
+          onClick={() => setCouponMessage(null)}
+          role="presentation"
+        >
+          <div
+            aria-modal="true"
+            className="coupon-modal"
+            onClick={(event) => event.stopPropagation()}
+            role="dialog"
+          >
+            <p className="eyebrow">coupon accepted</p>
+            <p>{couponMessage}</p>
+            <button
+              className="button-link button-primary"
+              onClick={() => setCouponMessage(null)}
+              type="button"
+            >
+              知道啦
+            </button>
+          </div>
+        </div>
+      ) : null}
+    </div>
   );
 }
