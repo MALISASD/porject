@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     template: `%s | ${siteConfig.brand}`
   },
   description: siteConfig.meta.description,
-  keywords: ["琳宝", "礼物网站", "回忆", "Long", "GitHub Pages"],
+  keywords: ["琳宝", "礼物站", "互动", "回忆", "Long", "Netlify"],
   alternates: {
     canonical: "/"
   },

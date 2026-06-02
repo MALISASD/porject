@@ -48,29 +48,149 @@ export type MysteryPrize = {
   description: string;
 };
 
+export type GiftExperienceCopy = {
+  intro: {
+    eyebrow: string;
+    title: string;
+    description: string;
+    actionLabel: string;
+  };
+  beijing: {
+    eyebrow: string;
+    title: string;
+    description: string;
+    items: Array<{
+      title: string;
+      description: string;
+    }>;
+  };
+  memories: {
+    eyebrow: string;
+    title: string;
+    description: string;
+    note: string;
+    reveal: string;
+  };
+  lottery: {
+    eyebrow: string;
+    title: string;
+    description: string;
+    actionLabel: string;
+    resultPrefix: string;
+  };
+  coupons: {
+    eyebrow: string;
+    title: string;
+    description: string;
+    packLabel: string;
+    closeLabel: string;
+  };
+  mystery: {
+    eyebrow: string;
+    title: string;
+    description: string;
+    actionLabel: string;
+  };
+  final: {
+    eyebrow: string;
+    title: string;
+    description: string;
+    signature: string;
+    buttonLabel: string;
+    revealText: string;
+  };
+};
+
 export const siteConfig = {
   brand: "琳宝",
   studio: "from Long",
   url: "https://www.fdaicar.top",
-  subtitle: "专属互动礼物盒",
-  heroTitle: "琳宝的专属礼物盒",
-  heroDescription: "里面有一点好运，一点偏爱，还有很多我想给你的开心。",
+  subtitle: "沉浸式互动礼物站",
+  heroTitle: "今年的生日礼物，先送你一半",
+  heroDescription: "今天先把一半心意送到你面前，剩下的一半，等六月底你来北京时亲手给你。",
   email: "linbao@fdaicar.top",
   meta: {
-    title: "琳宝的专属礼物盒",
+    title: "琳宝的沉浸式互动礼物站",
     description:
-      "这是 Long 给琳宝准备的专属互动礼物盒，里面有好运、小券、神秘礼物和认真记住的时间线。"
+      "这是 Long 给琳宝准备的沉浸式互动礼物站，里面有好运、小券、神秘礼物和认真记住的心动瞬间。"
   }
 };
 
 export const navigation: NavItem[] = [
   { label: "封面", href: "/#cover" },
+  { label: "北京", href: "/#beijing" },
+  { label: "记忆", href: "/#memories" },
   { label: "彩票", href: "/#lottery" },
   { label: "小券", href: "/#coupons" },
   { label: "礼盒", href: "/#mystery" },
-  { label: "时间线", href: "/#timeline" },
-  { label: "落款", href: "/#signature" }
+  { label: "落款", href: "/#signature" },
+  { label: "卡包", href: "/#coupons" }
 ];
+
+export const giftExperienceCopy: GiftExperienceCopy = {
+  intro: {
+    eyebrow: "a birthday surprise, half now, half in beijing",
+    title: "今年的生日礼物，先送你一半",
+    description: "今天先把这一半惊喜送到你面前，剩下更完整的礼物、陪伴和兑现，想留到六月底，等你来北京的时候亲手给你。",
+    actionLabel: "轻轻打开"
+  },
+  beijing: {
+    eyebrow: "the other half · beijing, late june",
+    title: "留给北京的那部分惊喜",
+    description:
+      "今年的生日礼物，不想只停在一个网页里。所以今天先把一半心意送到你面前，剩下更完整的礼物、陪伴和兑现，想留到六月底，等你来北京的时候，站在你面前亲手给你。",
+    items: [
+      {
+        title: "今天，先收下这一半",
+        description: "这个小网站先把生日惊喜送到你眼前，是一些我想让你今天就知道的心意。"
+      },
+      {
+        title: "六月底，北京见",
+        description: "等你来北京，剩下的一半礼物、没说完的话、想带你去的地方，我们慢慢兑现。"
+      },
+      {
+        title: "亲手给你，才完整",
+        description: "有些话想当面说，有些礼物想看你亲手拆，有些陪伴隔着屏幕给不了。这些，都留给见面那天。"
+      }
+    ]
+  },
+  memories: {
+    eyebrow: "memory book",
+    title: "我记得的心动瞬间",
+    description:
+      "不是因为某一天特别盛大，而是和你在一起的很多小瞬间，我都想好好记住。",
+    note: "北京下雪的那晚，我一直记得。",
+    reveal: "那天不是普通的一段路，是我后来反复想起的一场雪。"
+  },
+  lottery: {
+    eyebrow: "a little luck for today",
+    title: "今日份的小确幸",
+    description: "轻轻点一下，看看今天的小好运是多少。100 元以内 Long 负责兑现，也可以攒到六月底来北京，变成见面小基金。",
+    actionLabel: "点一下看看",
+    resultPrefix: "琳宝今天的小好运："
+  },
+  coupons: {
+    eyebrow: "daily rights",
+    title: "一些随时可以使用的小权利",
+    description: "打开卡包，收下几张只给琳宝的小券。",
+    packLabel: "琳宝专属卡包",
+    closeLabel: "知道啦"
+  },
+  mystery: {
+    eyebrow: "mystery box",
+    title: "请选择一个神秘礼物盒",
+    description: "每个盒子里都有一份不同的惊喜。",
+    actionLabel: "打开看看"
+  },
+  final: {
+    eyebrow: "closing note",
+    title: "这个生日，先把一半礼物送到你面前。",
+    description: "剩下的一半，等六月底你来北京，我们慢慢兑现。",
+    signature: "Long\n写给我的老婆琳宝",
+    buttonLabel: "点亮这一刻",
+    revealText: "礼物先送到了，北京见面的期待也开始了。"
+  }
+};
 
 export const homeLetter =
   "我把一些想对你说的话，还有一些我偷偷记住的小心思，做成了这个只送给你的小网站。";
@@ -85,17 +205,29 @@ export const homeMemories: HomeMemory[] = [
   {
     title: "那场北京的大雪",
     description:
-      "那天从北京去上海，出发去机场的时候，外面下着很大的雪。我坐在出租车里，拉着你的手，看着窗外的雪一点点落下来。飞机晚点，我们凌晨三点才到上海。可我现在想起来，记住的不是等待有多晚，是那一路上，你在我身边。",
+      "那天我们一起从北京去上海。出发去机场的时候，外面下着很大的雪。我坐在出租车里，拉着你的手，看着窗外的雪一点点落下来。飞机晚点，我们凌晨三点才到上海。可我现在想起来，记住的不是等待有多晚，是那一路上，你在我身边。",
     meta: "chapter 02",
     featured: true,
     image: "/snow-night-taxi-memory.jpg",
     note: "北京下雪的那晚，我记得很清楚。"
   },
   {
-    title: "后来开始觉得，有你真好",
+    title: "凌晨三点的上海",
     description:
-      "后来有很多普通的小瞬间，不一定多热烈，却让我慢慢确定：如果以后的很多路，都能和你一起走，那应该会是一件很好的事。",
+      "那天到上海已经很晚很晚了。但我一点都不觉得那只是一次赶路。因为从那以后，很多普通的路，好像只要和你一起走，就会变得很特别。",
     meta: "chapter 03"
+  },
+  {
+    title: "从初三，到初十",
+    description:
+      "2024 年大年初三，我们第一次见面。2025 年大年初十，我们结婚了。中间隔着一整年的春夏秋冬，最后你真的成了我的家人。",
+    meta: "chapter 04"
+  },
+  {
+    title: "以后也想继续记录你",
+    description:
+      "我不一定每次都说得很好，但我想把和你有关的开心、心动、普通日子，都慢慢记下来。因为你本身，就是我觉得很好的礼物。",
+    meta: "chapter 05"
   }
 ];
 
@@ -122,25 +254,25 @@ export const dailyCoupons: DailyCoupon[] = [
   {
     title: "抱抱兑换券",
     description:
-      "可在想撒娇、想耍赖、想被哄、想被抱住的时候使用。长期有效，不限次数。",
-    actionLabel: "立即使用",
-    message: "抱抱申请已提交，请 Long 立刻执行。",
+      "可在想撒娇、想耍赖、想被哄、想被抱住的时候使用。六月底来北京后优先兑现，长期有效，不限次数。",
+    actionLabel: "收入卡包",
+    message: "抱抱申请已加入六月底北京见面清单，请 Long 见面后立刻执行。",
     meta: "daily coupon"
   },
   {
-    title: "好吃的预约单",
+    title: "北京火锅兑现券",
     description:
-      "火锅、烤肉、甜品、夜宵、想吃什么都可以。琳宝负责点菜，Long 负责安排。",
-    actionLabel: "预约一顿好吃的",
-    message: "预约成功，请告诉 Long：时间、地点、想吃什么。",
-    meta: "dinner note"
+      "六月底来北京，想吃火锅、烤肉、甜品、夜宵都可以。琳宝负责点菜，Long 负责安排。",
+    actionLabel: "预约北京好吃的",
+    message: "预约成功，请告诉 Long：来北京后第一顿想吃什么。",
+    meta: "beijing dinner"
   },
   {
-    title: "陪你做小事券",
-    description: "可以用于逛街、散步、看电影、发呆、聊天、一起浪费时间。",
+    title: "北京夜景散步券",
+    description: "可以用于逛街、散步、看电影、发呆、聊天，或者在北京的晚上一起慢慢走一段路。",
     actionLabel: "领取这张",
-    message: "这张已经属于你了，随时可以找 Long 兑现。",
-    meta: "quiet time"
+    message: "这张已经属于你了，六月底来北京后随时可以找 Long 兑现。",
+    meta: "beijing night"
   }
 ];
 
@@ -160,28 +292,28 @@ export const mysteryPrizes: MysteryPrize[] = [
     description: "好运和偏爱都给你。"
   },
   {
-    title: "火锅一顿",
-    description: "你负责想吃哪家，我负责安排。"
+    title: "北京火锅兑现券",
+    description: "六月底来北京，你负责选口味，我负责安排。"
   },
   {
     title: "奶茶和甜品",
-    description: "甜的给你，开心也给你。"
+    description: "来北京后的第一份甜，Long 负责买给你。"
   },
   {
-    title: "电影约会一次",
-    description: "选一部你想看的电影，我们一起去。"
+    title: "北京电影院包场券",
+    description: "选一部你想看的电影，我们一起窝在最后一排，牵着手慢慢看完。"
   },
   {
-    title: "抱抱无限次",
-    description: "不限时间，不限次数，长期有效。"
+    title: "北京夜景散步券",
+    description: "晚一点出门，慢慢走一段只属于我们的路。"
   },
   {
-    title: "今天你最大",
-    description: "今天所有小脾气都优先被照顾。"
+    title: "来北京后的第一份惊喜",
+    description: "具体内容先保密，Long 会放在见面那天认真给你。"
   },
   {
-    title: "神秘礼物预约权",
-    description: "礼物内容暂不公开，但 Long 会认真准备。"
+    title: "六月底见面礼预约权",
+    description: "这份先保密，等你来北京时亲手给你。"
   },
   {
     title: "游戏机愿望基金",

@@ -73,13 +73,17 @@ export function SiteHeader() {
 
         <nav aria-label="主导航" className="site-nav">
           {navigation.map((item) => (
-            <Link key={item.href} href={item.href}>
+            <Link
+              className={item.label === "卡包" ? "site-nav-pack" : undefined}
+              key={`${item.href}-${item.label}`}
+              href={item.href}
+            >
               {item.label}
             </Link>
           ))}
         </nav>
 
-        <ButtonLink href="/#lottery" variant="secondary">
+        <ButtonLink href="/#cover" variant="secondary">
           打开礼物
         </ButtonLink>
       </div>
@@ -99,10 +103,11 @@ export function SiteFooter() {
         </div>
 
         <div className="footer-links">
+          <Link href="/#memories">记忆</Link>
           <Link href="/#lottery">彩票</Link>
           <Link href="/#coupons">小券</Link>
           <Link href="/#mystery">礼盒</Link>
-          <Link href="/#timeline">时间线</Link>
+          <Link href="/#signature">落款</Link>
           <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>
         </div>
       </div>
