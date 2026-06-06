@@ -1523,6 +1523,178 @@ body[data-gift-state="closed"] .page-shell,
   display: none;
 }
 
+.birthday-access-gate {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  padding: 28px;
+  color: #fff3ea;
+  background:
+    radial-gradient(circle at 48% 40%, rgba(207, 164, 255, 0.22), transparent 32%),
+    radial-gradient(circle at 22% 18%, rgba(232, 184, 109, 0.12), transparent 26%),
+    radial-gradient(circle at 78% 74%, rgba(142, 197, 217, 0.16), transparent 30%),
+    linear-gradient(155deg, #211b36 0%, #382544 48%, #17283b 100%);
+}
+
+.birthday-access-stars,
+.birthday-access-stars::before,
+.birthday-access-stars::after {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.birthday-access-stars::before,
+.birthday-access-stars::after {
+  content: "";
+  opacity: 0.72;
+  background-image:
+    radial-gradient(circle, rgba(255, 243, 234, 0.84) 0 1px, transparent 1.5px),
+    radial-gradient(circle, rgba(207, 164, 255, 0.56) 0 1px, transparent 1.5px),
+    radial-gradient(circle, rgba(232, 184, 109, 0.42) 0 1px, transparent 1.5px);
+  background-size: 112px 124px, 154px 176px, 220px 198px;
+  animation: planet-star-drift 38s linear infinite;
+}
+
+.birthday-access-stars::after {
+  opacity: 0.28;
+  filter: blur(1px);
+  animation-duration: 58s;
+  animation-direction: reverse;
+}
+
+.access-star,
+.access-orbit {
+  position: absolute;
+  display: block;
+  pointer-events: none;
+}
+
+.access-star {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: rgba(255, 243, 234, 0.86);
+  box-shadow: 0 0 28px rgba(255, 243, 234, 0.32);
+  animation: access-star-pulse 4s ease-in-out infinite;
+}
+
+.access-star-one {
+  left: 18%;
+  top: 24%;
+}
+
+.access-star-two {
+  right: 22%;
+  top: 18%;
+  animation-delay: -1.2s;
+}
+
+.access-star-three {
+  right: 16%;
+  bottom: 24%;
+  animation-delay: -2.4s;
+}
+
+.access-orbit {
+  left: 50%;
+  top: 50%;
+  width: min(680px, 86vw);
+  height: min(260px, 34vw);
+  border: 1px dashed rgba(255, 243, 234, 0.13);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) rotate(-14deg);
+  box-shadow: 0 0 44px rgba(207, 164, 255, 0.08);
+}
+
+.access-orbit-two {
+  width: min(520px, 72vw);
+  height: min(190px, 28vw);
+  transform: translate(-50%, -50%) rotate(16deg);
+  border-color: rgba(232, 216, 178, 0.12);
+}
+
+.birthday-access-card {
+  position: relative;
+  z-index: 1;
+  width: min(560px, 100%);
+  padding: clamp(24px, 5vw, 44px);
+  border: 1px solid rgba(255, 243, 234, 0.16);
+  border-radius: 30px;
+  background:
+    radial-gradient(circle at 28% 18%, rgba(255, 243, 234, 0.12), transparent 28%),
+    linear-gradient(145deg, rgba(255, 243, 234, 0.12), rgba(207, 164, 255, 0.08)),
+    rgba(28, 22, 44, 0.66);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 34px 90px rgba(20, 10, 30, 0.42),
+    0 0 80px rgba(207, 164, 255, 0.12);
+  backdrop-filter: blur(22px);
+}
+
+.birthday-access-card h1 {
+  margin: 8px 0 18px;
+  color: #fff3ea;
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 7vw, 4.4rem);
+  line-height: 0.98;
+  text-shadow: 0 0 34px rgba(207, 164, 255, 0.28);
+}
+
+.birthday-access-card label {
+  display: block;
+  margin-bottom: 12px;
+  color: rgba(255, 243, 234, 0.74);
+}
+
+.birthday-access-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  padding: 8px;
+  border: 1px solid rgba(255, 243, 234, 0.16);
+  border-radius: 999px;
+  background: rgba(20, 10, 30, 0.26);
+  transition: border-color 220ms ease, box-shadow 220ms ease;
+}
+
+.birthday-access-row.has-error {
+  border-color: rgba(247, 188, 174, 0.48);
+  box-shadow: 0 0 0 3px rgba(247, 188, 174, 0.12);
+}
+
+.birthday-access-row input {
+  min-width: 0;
+  border: 0;
+  padding: 11px 16px;
+  color: #fff3ea;
+  background: transparent;
+  font: inherit;
+  outline: 0;
+}
+
+.birthday-access-row input::placeholder {
+  color: rgba(255, 243, 234, 0.42);
+}
+
+.birthday-access-row button {
+  border: 0;
+  border-radius: 999px;
+  padding: 11px 20px;
+  color: #2b2138;
+  background: linear-gradient(135deg, #fff3ea, #e8b86d);
+  cursor: pointer;
+  box-shadow: 0 12px 28px rgba(20, 10, 30, 0.22);
+}
+
+.birthday-access-hint {
+  min-height: 1.6em;
+  margin: 14px 0 0;
+  color: rgba(255, 243, 234, 0.68);
+}
+
 .gift-intro.is-opening {
   animation: intro-bg-glow 3800ms ease;
 }
@@ -4960,6 +5132,19 @@ body[data-gift-state="closed"] .page-shell,
   }
 }
 
+@keyframes access-star-pulse {
+  0%,
+  100% {
+    opacity: 0.48;
+    transform: scale(0.9);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.18);
+  }
+}
+
 @media (max-width: 980px) {
   .planet-system {
     min-height: 720px;
@@ -5005,6 +5190,19 @@ body[data-gift-state="closed"] .page-shell,
 }
 
 @media (max-width: 720px) {
+  .birthday-access-gate {
+    padding: 18px;
+  }
+
+  .birthday-access-row {
+    grid-template-columns: 1fr;
+    border-radius: 24px;
+  }
+
+  .birthday-access-row button {
+    width: 100%;
+  }
+
   .planet-hub {
     padding: 34px 0 52px;
   }

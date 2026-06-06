@@ -88,6 +88,8 @@ const MYSTERY_KEY = "linbao-giftbox-mystery";
 const COUPON_KEY = "linbao-giftbox-coupons";
 const COUPON_PACK_KEY = "linbao-giftbox-coupon-pack";
 const MESSAGE_KEY = "linbao-giftbox-message";
+const ACCESS_KEY = "linbao-birthday-planet-access";
+const ACCESS_CODE = "0608";
 const BURST_LIFETIME = 1800;
 const WEDDING_RIDDLE_ANSWER = "2025年2月7日";
 const WEDDING_RIDDLE_ACCEPTED_DIGITS = new Set(["202527", "20250207"]);
@@ -1764,7 +1766,64 @@ function BurstLayer({ bursts }: { bursts: Burst[] }) {
   );
 }
 
+function BirthdayAccessGate({ onUnlock }: { onUnlock: () => void }) {
+  const [code, setCode] = useState("");
+  const [hasError, setHasError] = useState(false);
+
+  function submitAccessCode(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    if (code.trim() === ACCESS_CODE) {
+      getStorage()?.setItem(ACCESS_KEY, "unlocked");
+      setHasError(false);
+      onUnlock();
+      return;
+    }
+
+    setHasError(true);
+  }
+
+  return (
+    <section className="birthday-access-gate" aria-label="生日星球访问入口">
+      <div className="birthday-access-stars" aria-hidden="true">
+        <span className="access-star access-star-one" />
+        <span className="access-star access-star-two" />
+        <span className="access-star access-star-three" />
+        <span className="access-orbit access-orbit-one" />
+        <span className="access-orbit access-orbit-two" />
+      </div>
+
+      <form className="birthday-access-card" onSubmit={submitAccessCode}>
+        <p className="eyebrow">private birthday planet</p>
+        <h1>琳宝的生日星球正在准备中</h1>
+        <label htmlFor="birthday-access-code">请输入暗号进入</label>
+        <div className={classNames("birthday-access-row", hasError && "has-error")}>
+          <input
+            autoComplete="off"
+            id="birthday-access-code"
+            inputMode="numeric"
+            maxLength={8}
+            onChange={(event) => {
+              setCode(event.target.value);
+              setHasError(false);
+            }}
+            placeholder="暗号"
+            type="text"
+            value={code}
+          />
+          <button type="submit">进入</button>
+        </div>
+        <p className="birthday-access-hint" aria-live="polite">
+          {hasError ? "暗号不对，再想想和生日有关的数字。" : "暗夜星光已经亮起，等你输入正确暗号。"}
+        </p>
+      </form>
+    </section>
+  );
+}
+
 export function GiftExperience() {
+  const [accessChecked, setAccessChecked] = useState(false);
+  const [accessGranted, setAccessGranted] = useState(false);
   const [hasOpened, setHasOpened] = useState(false);
   const [introStage, setIntroStage] = useState<IntroStage>("cover");
   const [countdownValue, setCountdownValue] = useState<CountdownValue>(5);
@@ -1790,6 +1849,8 @@ export function GiftExperience() {
   const burstTimersRef = useRef<number[]>([]);
 
   useEffect(() => {
+    setAccessGranted(getStorage()?.getItem(ACCESS_KEY) === "unlocked");
+    setAccessChecked(true);
     setLotteryAmount(readStoredNumber(LOTTERY_KEY));
     setMysteryResult(readStoredMystery());
     setCouponStates(readStoredCouponStates());
@@ -1806,12 +1867,12 @@ export function GiftExperience() {
   }, []);
 
   useEffect(() => {
-    document.body.dataset.giftState = hasOpened ? "open" : "closed";
+    document.body.dataset.giftState = accessGranted && hasOpened ? "open" : "closed";
 
     return () => {
       delete document.body.dataset.giftState;
     };
-  }, [hasOpened]);
+  }, [accessGranted, hasOpened]);
 
   useEffect(() => {
     return () => {
@@ -2126,6 +2187,14 @@ export function GiftExperience() {
       value: trimmed,
       message: trimmed
     });
+  }
+
+  if (!accessChecked) {
+    return null;
+  }
+
+  if (!accessGranted) {
+    return <BirthdayAccessGate onUnlock={() => setAccessGranted(true)} />;
   }
 
   return (
