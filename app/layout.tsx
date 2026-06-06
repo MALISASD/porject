@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
+import { LoveEventsNetlifyForm } from "@/components/love-events-netlify-form";
 import { SiteFooter, SiteHeader } from "@/components/site-shell";
 import { siteConfig } from "@/data/site";
 
@@ -41,6 +42,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <SiteHeader />
           <main className="page-shell">{children}</main>
           <SiteFooter />
+          <LoveEventsNetlifyForm />
         </div>
       </body>
     </html>

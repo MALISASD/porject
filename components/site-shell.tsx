@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
+import { MusicButton } from "@/components/music-button";
 import { navigation, siteConfig } from "@/data/site";
 
 type ButtonLinkProps = {
@@ -83,9 +84,7 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <ButtonLink href="/#cover" variant="secondary">
-          打开礼物
-        </ButtonLink>
+        <MusicButton />
       </div>
     </header>
   );
