@@ -31,11 +31,13 @@ html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  overflow-x: clip;
 }
 
 body {
   margin: 0;
   min-width: 320px;
+  overflow-x: clip;
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-body);
@@ -75,7 +77,8 @@ select {
 }
 
 .site-frame {
-  min-height: 100vh;
+  min-height: 100svh;
+  overflow-x: clip;
 }
 
 .shell {
@@ -2708,9 +2711,9 @@ body[data-gift-state="closed"] .page-shell,
 
 .planet-hub {
   position: relative;
-  min-height: 100vh;
-  overflow: hidden;
-  padding: 48px 0 70px;
+  min-height: 100svh;
+  overflow: clip;
+  padding: 48px 0 calc(70px + env(safe-area-inset-bottom));
   color: #fff3ea;
   background:
     radial-gradient(circle at 50% 38%, rgba(207, 164, 255, 0.24), transparent 32%),
@@ -4760,9 +4763,10 @@ body[data-gift-state="closed"] .page-shell,
 
 .planet-page {
   position: relative;
-  min-height: 100vh;
-  overflow: hidden;
-  padding: 56px 0 80px;
+  min-height: 100svh;
+  overflow-x: clip;
+  overflow-y: visible;
+  padding: 56px 0 calc(80px + env(safe-area-inset-bottom));
   color: #fff3ea;
   background:
     radial-gradient(circle at 28% 18%, rgba(207, 164, 255, 0.18), transparent 28%),
@@ -6630,53 +6634,77 @@ body[data-gift-state="closed"] .page-shell,
   }
 
   .planet-hub {
-    padding: 34px 0 52px;
+    min-height: 100svh;
+    padding: max(24px, env(safe-area-inset-top)) 0 calc(76px + env(safe-area-inset-bottom));
+  }
+
+  .planet-hub-shell {
+    gap: 16px;
+  }
+
+  .planet-hub-heading {
+    max-width: 100%;
   }
 
   .planet-hub-heading h1 {
-    font-size: clamp(2.35rem, 11vw, 3.65rem);
+    margin-top: 4px;
+    font-size: clamp(2.2rem, 10vw, 3.35rem);
+    line-height: 1.02;
   }
 
   .planet-title {
-    max-width: 7.2em;
+    max-width: 7.8em;
     gap: 0 0.04em;
   }
 
+  .planet-hub-heading p:not(.eyebrow) {
+    max-width: 33ch;
+    font-size: 0.98rem;
+    line-height: 1.72;
+  }
+
   .planet-system {
-    min-height: 620px;
-    margin-top: 10px;
-    --orbit-scale: 0.56;
+    min-height: 590px;
+    margin-top: 0;
+    --orbit-scale: 0.48;
   }
 
   .main-gift-planet {
-    top: 43%;
-    width: min(218px, 62vw);
-    height: min(218px, 62vw);
+    top: 44%;
+    width: min(194px, 52vw);
+    height: min(194px, 52vw);
   }
 
   .main-planet-body {
-    inset: 14px;
-    --relief-scale: 0.78;
+    inset: 13px;
+    --relief-scale: 0.66;
   }
 
   .planet-whisper {
-    bottom: -174px;
-    width: min(380px, 90vw);
-    font-size: 1.04rem;
+    bottom: -134px;
+    width: min(340px, 84vw);
+    font-size: 0.96rem;
+    line-height: 1.45;
   }
 
   .gift-satellite {
-    width: 88px;
+    width: 82px;
+    gap: 7px;
+    transform:
+      translateX(calc(var(--orbit-radius-x) * var(--orbit-scale, 1)))
+      translate(-50%, -50%)
+      rotate(calc(var(--orbit-counter-angle) - var(--orbit-track-rotate, 0deg)))
+      scaleY(var(--orbit-ratio-inverse, 1));
   }
 
   .satellite-shell {
-    width: 66px;
-    height: 66px;
+    width: 62px;
+    height: 62px;
   }
 
   .satellite-planet-ring {
-    width: 92px;
-    height: 31px;
+    width: 86px;
+    height: 29px;
     border-width: 3px;
   }
 
@@ -6690,16 +6718,20 @@ body[data-gift-state="closed"] .page-shell,
   }
 
   .satellite-core {
-    inset: 13px;
+    inset: 12px;
   }
 
   .satellite-icon {
-    width: 27px;
-    height: 27px;
+    width: 25px;
+    height: 25px;
   }
 
   .satellite-label {
-    font-size: 0.78rem;
+    max-width: 7em;
+    font-size: 0.72rem;
+    line-height: 1.18;
+    text-align: center;
+    text-wrap: balance;
   }
 
   .journey-copy {
@@ -6732,8 +6764,8 @@ body[data-gift-state="closed"] .page-shell,
   }
 
   .planet-easter-egg {
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
     font-size: 0.78rem;
   }
 
@@ -6791,27 +6823,43 @@ body[data-gift-state="closed"] .page-shell,
   }
 
   .system-orbit-inner {
-    width: 254px;
-    height: 158px;
+    width: 222px;
+    height: 138px;
   }
 
   .system-orbit-middle {
-    width: 354px;
-    height: 218px;
+    width: 308px;
+    height: 190px;
   }
 
   .system-orbit-outer {
-    width: 454px;
-    height: 276px;
+    width: 398px;
+    height: 242px;
   }
 
   .planet-map-hint {
-    margin-top: -18px;
-    font-size: 0.9rem;
+    max-width: 30ch;
+    margin-top: 8px;
+    padding-bottom: calc(18px + env(safe-area-inset-bottom));
+    font-size: 0.86rem;
+    line-height: 1.55;
   }
 
   .planet-page {
-    padding: 34px 0 56px;
+    padding: max(32px, env(safe-area-inset-top)) 0 calc(76px + env(safe-area-inset-bottom));
+  }
+
+  .planet-page-shell {
+    gap: 24px;
+  }
+
+  .planet-page-hero h1 {
+    font-size: clamp(2.65rem, 14vw, 4.6rem);
+    line-height: 1;
+  }
+
+  .planet-page-actions {
+    gap: 10px;
   }
 
   .planet-soft-zone {
@@ -6906,6 +6954,255 @@ body[data-gift-state="closed"] .page-shell,
 
   .media-card {
     transform: none;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --shell: min(100vw - 28px, 430px);
+  }
+
+  .page-shell {
+    padding-bottom: calc(64px + env(safe-area-inset-bottom));
+  }
+
+  .planet-hub {
+    padding-top: max(18px, env(safe-area-inset-top));
+    padding-bottom: calc(92px + env(safe-area-inset-bottom));
+  }
+
+  .planet-hub-shell {
+    gap: 10px;
+  }
+
+  .planet-hub-heading h1 {
+    font-size: clamp(2rem, 9.6vw, 2.95rem);
+  }
+
+  .planet-title {
+    max-width: 8.4em;
+  }
+
+  .planet-hub-heading p:not(.eyebrow) {
+    max-width: 31ch;
+    font-size: 0.9rem;
+    line-height: 1.64;
+  }
+
+  .planet-system {
+    min-height: min(560px, calc(100svh - 210px));
+    min-height: max(520px, min(560px, calc(100svh - 210px)));
+    --orbit-scale: 0.36;
+  }
+
+  .planet-orbit-map {
+    inset: 8px 0 0;
+  }
+
+  .main-gift-planet {
+    top: 44%;
+    width: min(176px, 48vw);
+    height: min(176px, 48vw);
+  }
+
+  .main-planet-aura {
+    inset: -22px;
+  }
+
+  .main-planet-body {
+    inset: 12px;
+    --relief-scale: 0.58;
+  }
+
+  .main-planet-land-one {
+    width: 90px;
+    height: 40px;
+  }
+
+  .main-planet-land-two {
+    width: 98px;
+    height: 48px;
+  }
+
+  .planet-whisper {
+    bottom: -116px;
+    width: min(302px, 80vw);
+    font-size: 0.86rem;
+    line-height: 1.4;
+  }
+
+  .gift-satellite {
+    width: 76px;
+    min-width: 50px;
+    gap: 6px;
+  }
+
+  .satellite-shell {
+    width: 56px;
+    height: 56px;
+  }
+
+  .satellite-planet-ring {
+    width: 78px;
+    height: 26px;
+    border-width: 2px;
+  }
+
+  .satellite-inner-ring {
+    inset: 7px;
+  }
+
+  .satellite-core {
+    inset: 11px;
+  }
+
+  .satellite-icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .satellite-label {
+    max-width: 6.6em;
+    font-size: 0.66rem;
+    line-height: 1.12;
+    text-shadow:
+      0 2px 12px rgba(20, 10, 30, 0.72),
+      0 0 12px rgba(207, 164, 255, 0.16);
+  }
+
+  .system-orbit-inner {
+    width: 188px;
+    height: 116px;
+  }
+
+  .system-orbit-middle {
+    width: 262px;
+    height: 162px;
+  }
+
+  .system-orbit-outer {
+    width: 318px;
+    height: 194px;
+  }
+
+  .system-orbit-ring,
+  .planet-personal-track {
+    opacity: 0.32;
+  }
+
+  .planet-easter-egg {
+    width: 30px;
+    height: 30px;
+  }
+
+  .planet-map-hint {
+    margin-top: 12px;
+    padding-bottom: calc(30px + env(safe-area-inset-bottom));
+    font-size: 0.8rem;
+  }
+
+  .planet-page {
+    padding-top: max(28px, env(safe-area-inset-top));
+    padding-bottom: calc(86px + env(safe-area-inset-bottom));
+  }
+
+  .planet-page-shell {
+    gap: 20px;
+  }
+
+  .planet-page-hero h1 {
+    font-size: clamp(2.35rem, 12.4vw, 3.55rem);
+  }
+
+  .planet-page-hero p:not(.eyebrow) {
+    font-size: 0.95rem;
+    line-height: 1.72;
+  }
+
+  .planet-page-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .planet-action,
+  .planet-action-ghost {
+    width: 100%;
+    min-height: 44px;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .planet-soft-zone {
+    padding: 18px;
+    border-radius: 22px;
+  }
+
+  .planet-soft-zone h2 {
+    font-size: clamp(1.72rem, 9vw, 2.55rem);
+    line-height: 1.08;
+  }
+
+  .star-fortune-machine {
+    padding: 16px;
+    border-radius: 24px;
+  }
+
+  .fortune-machine-shell {
+    min-height: 306px;
+    padding: 14px;
+  }
+
+  .fortune-reel-window {
+    height: 114px;
+  }
+
+  .fortune-symbol {
+    min-width: 58px;
+    min-height: 34px;
+    font-size: 0.7rem;
+  }
+
+  .fortune-symbol-final {
+    min-width: min(74px, 90%);
+    min-height: 46px;
+    font-size: 0.76rem;
+  }
+
+  .gift-card-face {
+    padding: 16px;
+  }
+
+  .wish-capsule-field {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .wish-capsule {
+    min-height: 68px;
+  }
+
+  .wish-capsule span {
+    width: min(86px, 100%);
+    min-height: 50px;
+    font-size: 0.86rem;
+  }
+
+  .birth-time-gate {
+    gap: 18px;
+  }
+
+  .birth-time-orbit {
+    min-height: 220px;
+  }
+
+  .birth-date-grid article {
+    min-height: auto;
+  }
+
+  .media-memory-grid,
+  .travel-wish-grid,
+  .floating-memory-grid {
+    grid-template-columns: 1fr;
   }
 }
 
