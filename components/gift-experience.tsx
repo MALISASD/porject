@@ -1,6 +1,6 @@
 "use client";
 
-import type { CSSProperties, FormEvent, KeyboardEvent } from "react";
+import type { CSSProperties, FormEvent, KeyboardEvent, PointerEvent } from "react";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -60,7 +60,7 @@ type PlanetTransitionKind =
   | "travel"
   | "birthDay";
 
-type EasterEggId = "snow" | "lock" | "letter" | "tablet" | "apple" | "soup" | "wave" | "calendar";
+type EasterEggId = "snow" | "lock" | "letter" | "apple" | "soup" | "wave" | "calendar";
 
 type BurstParticle = {
   id: number;
@@ -103,7 +103,10 @@ const planetWhispers = [
   "如果你饿了，可以去蘑菇汤星看看。",
   "蘑菇汤星里，藏着你来北京后的第一顿饭。",
   "那场北京的大雪，我一直记得。",
-  "点点这些小星球，慢慢探索吧。"
+  "点点这些小星球，慢慢探索吧。",
+  "礼物宇宙已经点亮。",
+  "Long 正在带你打开这片小宇宙。",
+  "所有小星球，都在为你发光。"
 ];
 
 const planetPortals = [
@@ -115,13 +118,14 @@ const planetPortals = [
     travelText: "我带你回到我们刚认识的时候。",
     transitionName: "回忆流光",
     transition: "memory",
-    glyph: "旧",
+    icon: "memory",
     href: "/memory",
     orbit: "middle",
     radiusX: "318px",
     radiusY: "194px",
     angle: "210deg",
     counterAngle: "-210deg",
+    trackRotate: "-11deg",
     duration: "92s",
     tone: "violet"
   },
@@ -133,13 +137,14 @@ const planetPortals = [
     travelText: "来，先拆一份属于你的惊喜。",
     transitionName: "礼盒展开",
     transition: "gift",
-    glyph: "仓",
+    icon: "gift",
     href: "/gifts",
     orbit: "middle",
     radiusX: "318px",
     radiusY: "194px",
     angle: "324deg",
     counterAngle: "-324deg",
+    trackRotate: "12deg",
     duration: "104s",
     tone: "gold"
   },
@@ -151,13 +156,14 @@ const planetPortals = [
     travelText: "走，先去看看好吃的。",
     transitionName: "暖汤升腾",
     transition: "food",
-    glyph: "汤",
+    icon: "soup",
     href: "/food",
     orbit: "inner",
     radiusX: "230px",
     radiusY: "140px",
     angle: "166deg",
     counterAngle: "-166deg",
+    trackRotate: "-6deg",
     duration: "76s",
     tone: "rose"
   },
@@ -169,13 +175,14 @@ const planetPortals = [
     travelText: "带你去看一场属于我们的电影。",
     transitionName: "胶片跃迁",
     transition: "movie",
-    glyph: "影",
+    icon: "film",
     href: "/movie",
     orbit: "middle",
     radiusX: "318px",
     radiusY: "194px",
     angle: "32deg",
     counterAngle: "-32deg",
+    trackRotate: "18deg",
     duration: "108s",
     tone: "blue"
   },
@@ -187,13 +194,14 @@ const planetPortals = [
     travelText: "想你了的话，这里会给你一个抱抱。",
     transitionName: "失重靠近",
     transition: "hug",
-    glyph: "抱",
+    icon: "heart",
     href: "/hug",
     orbit: "inner",
     radiusX: "230px",
     radiusY: "140px",
     angle: "72deg",
     counterAngle: "-72deg",
+    trackRotate: "8deg",
     duration: "72s",
     tone: "peach"
   },
@@ -205,13 +213,14 @@ const planetPortals = [
     travelText: "北京的那部分礼物，我想亲手给你。",
     transitionName: "启程路线",
     transition: "beijing",
-    glyph: "站",
+    icon: "route",
     href: "/beijing",
     orbit: "outer",
     radiusX: "410px",
     radiusY: "246px",
     angle: "105deg",
     counterAngle: "-105deg",
+    trackRotate: "-18deg",
     duration: "126s",
     tone: "mint"
   },
@@ -223,13 +232,14 @@ const planetPortals = [
     travelText: "想说什么，都可以悄悄告诉我。",
     transitionName: "信件展开",
     transition: "message",
-    glyph: "信",
+    icon: "letter",
     href: "/message",
     orbit: "outer",
     radiusX: "410px",
     radiusY: "246px",
     angle: "258deg",
     counterAngle: "-258deg",
+    trackRotate: "22deg",
     duration: "118s",
     tone: "lilac"
   },
@@ -241,13 +251,14 @@ const planetPortals = [
     travelText: "有些画面，适合慢慢翻。",
     transitionName: "相册翻页",
     transition: "moments",
-    glyph: "映",
+    icon: "camera",
     href: "/moments",
     orbit: "outer",
     radiusX: "410px",
     radiusY: "246px",
     angle: "338deg",
     counterAngle: "-338deg",
+    trackRotate: "-9deg",
     duration: "136s",
     tone: "blue"
   },
@@ -259,13 +270,14 @@ const planetPortals = [
     travelText: "以后，我还想带你去看海。",
     transitionName: "海浪穿行",
     transition: "travel",
-    glyph: "海",
+    icon: "wave",
     href: "/travel",
     orbit: "outer",
     radiusX: "410px",
     radiusY: "246px",
     angle: "18deg",
     counterAngle: "-18deg",
+    trackRotate: "15deg",
     duration: "142s",
     tone: "sea"
   },
@@ -277,13 +289,14 @@ const planetPortals = [
     travelText: "我想看看，你来到这个世界的那一天。",
     transitionName: "时间回溯",
     transition: "birthDay",
-    glyph: "日",
+    icon: "calendar",
     href: "/birth-day",
     orbit: "outer",
     radiusX: "410px",
     radiusY: "246px",
     angle: "184deg",
     counterAngle: "-184deg",
+    trackRotate: "-25deg",
     duration: "132s",
     tone: "moon"
   }
@@ -295,22 +308,36 @@ const planetPortals = [
   travelText: string;
   transitionName: string;
   transition: PlanetTransitionKind;
-  glyph: string;
+  icon: string;
   href: string;
   orbit: "inner" | "middle" | "outer";
   radiusX: string;
   radiusY: string;
   angle: string;
   counterAngle: string;
+  trackRotate: string;
   duration: string;
   tone: string;
 }>;
+
+const planetLoveNotes: Record<PlanetPortalId, string> = {
+  beijing: "下一站去哪里都没关系，只要还是我们一起走。",
+  birthDay: "有些日子一旦记住了，就会慢慢变成一辈子的事。",
+  food: "你喜欢的那些味道，我都想一口一口陪你吃下去。",
+  gift: "这里装着我想亲手送给你的，那些还没拆开的偏爱。",
+  hug: "如果你想撒娇，这颗星会先替我抱抱你。",
+  message: "有些话不一定当面说得好，但我都想悄悄讲给你听。",
+  moments: "我们的故事，我想一帧一帧地慢慢存起来。",
+  movie: "以后想看的电影，我都想陪你慢慢看完。",
+  story: "以前那些日子没有白过，因为后来都变成了想念你的光。",
+  travel: "等你来北京以后，我也想带你去看更远一点的海。"
+};
 
 const easterEggs = [
   {
     id: "snow",
     label: "北京雪夜第一次坐飞机",
-    glyph: "机",
+    icon: "snow",
     x: "13%",
     y: "18%",
     text: "那晚北京下着雪，\n你第一次坐飞机，\n而我刚好陪着你去看新的城市。"
@@ -318,7 +345,7 @@ const easterEggs = [
   {
     id: "lock",
     label: "普救寺同心锁",
-    glyph: "锁",
+    icon: "lock",
     x: "82%",
     y: "24%",
     text: "你本来想刻平平安安、健健康康，\n结果锁上却写成了永远在一起。"
@@ -326,23 +353,15 @@ const easterEggs = [
   {
     id: "letter",
     label: "七里山塘写信",
-    glyph: "信",
+    icon: "letter",
     x: "20%",
     y: "78%",
     text: "那天你写下爱我，\n我一直记得。"
   },
   {
-    id: "tablet",
-    label: "华为平板",
-    glyph: "屏",
-    x: "76%",
-    y: "76%",
-    text: "给你买平板，\n只是想让你窝着看小说的时候舒服一点。"
-  },
-  {
     id: "apple",
     label: "平安夜平安果",
-    glyph: "果",
+    icon: "apple",
     x: "88%",
     y: "58%",
     text: "第一次陪你摆摊卖平安果，\n你有点害怕给我打电话，\n其实我就在旁边偷偷陪着你。"
@@ -350,7 +369,7 @@ const easterEggs = [
   {
     id: "soup",
     label: "萨莉亚蘑菇汤",
-    glyph: "汤",
+    icon: "soup",
     x: "28%",
     y: "58%",
     text: "你最爱吃萨莉亚，\n而且每次必须点蘑菇汤。\n我一直记得。"
@@ -358,7 +377,7 @@ const easterEggs = [
   {
     id: "wave",
     label: "以后带你去看海",
-    glyph: "浪",
+    icon: "wave",
     x: "9%",
     y: "54%",
     text: "以后想带你去看一次不用赶时间的大海，\n慢慢走到海边，听风，看浪。"
@@ -366,7 +385,7 @@ const easterEggs = [
   {
     id: "calendar",
     label: "那一天星入口提示",
-    glyph: "日",
+    icon: "calendar",
     x: "70%",
     y: "17%",
     text: "1999 年 6 月 8 日，星期二。\n那一天，你来到这个世界，\n后来也来到我的生命里。"
@@ -374,7 +393,7 @@ const easterEggs = [
 ] satisfies Array<{
   id: EasterEggId;
   label: string;
-  glyph: string;
+  icon: string;
   x: string;
   y: string;
   text: string;
@@ -786,6 +805,55 @@ function CakeReveal() {
           />
         ))}
       </div>
+    </div>
+  );
+}
+
+function BirthdayCakeFountains() {
+  const colors = ["#fff3ea", "#ffd7ea", "#cfa4ff", "#e8b86d", "#8ec5d9", "#f7d4c3"];
+  const shapes = ["spark", "ribbon", "petal", "dot", "heart", "star"];
+  const pieces = Array.from({ length: 52 }, (_, index) => {
+    const isLeft = index % 2 === 0;
+    const sideIndex = Math.floor(index / 2);
+    const arc = 120 + (sideIndex % 9) * 14;
+    const lift = -150 - (sideIndex % 8) * 18;
+    const rotate = (isLeft ? 1 : -1) * (120 + sideIndex * 17);
+
+    return {
+      color: colors[index % colors.length],
+      delay: `${70 + (sideIndex % 13) * 32}ms`,
+      duration: `${1180 + (sideIndex % 6) * 95}ms`,
+      id: `cake-fountain-${index}`,
+      midRotate: `${Math.round(rotate * 0.58)}deg`,
+      rotate: `${rotate}deg`,
+      shape: shapes[index % shapes.length],
+      side: isLeft ? "left" : "right",
+      x: `${isLeft ? arc : -arc}px`,
+      y: `${lift - (index % 4) * 10}px`
+    };
+  });
+
+  return (
+    <div className="birthday-cake-fountains" aria-hidden="true">
+      <span className="cake-fountain-glow cake-fountain-glow-left" />
+      <span className="cake-fountain-glow cake-fountain-glow-right" />
+      {pieces.map((piece) => (
+        <span
+          className={classNames("cake-fountain-piece", `cake-fountain-${piece.side}`, `cake-fountain-${piece.shape}`)}
+          key={piece.id}
+          style={
+            {
+              "--fountain-color": piece.color,
+              "--fountain-delay": piece.delay,
+              "--fountain-duration": piece.duration,
+              "--fountain-mid-rotate": piece.midRotate,
+              "--fountain-rotate": piece.rotate,
+              "--fountain-x": piece.x,
+              "--fountain-y": piece.y
+            } as CSSProperties
+          }
+        />
+      ))}
     </div>
   );
 }
@@ -1259,8 +1327,23 @@ function GiftPlanetHub({
   const [orbitPaused, setOrbitPaused] = useState(false);
   const [planetPulse, setPlanetPulse] = useState(false);
   const [travelingPortal, setTravelingPortal] = useState<(typeof planetPortals)[number] | null>(null);
+  const [draggingPortal, setDraggingPortal] = useState<PlanetPortalId | null>(null);
+  const [litPortal, setLitPortal] = useState<PlanetPortalId | null>(null);
+  const [feedbackNoteKey, setFeedbackNoteKey] = useState(0);
+  const [manualAngles, setManualAngles] = useState<Partial<Record<PlanetPortalId, number>>>({});
   const pulseTimerRef = useRef<number | null>(null);
+  const litTimerRef = useRef<number | null>(null);
+  const litPortalIndexRef = useRef(0);
   const navigationTimerRef = useRef<number | null>(null);
+  const planetSystemRef = useRef<HTMLDivElement | null>(null);
+  const dragStateRef = useRef<{
+    id: PlanetPortalId;
+    pointerId: number;
+    startX: number;
+    startY: number;
+    hasMoved: boolean;
+  } | null>(null);
+  const suppressClickRef = useRef<PlanetPortalId | null>(null);
 
   const foodVouchers = [
     dailyCoupons[1],
@@ -1296,7 +1379,9 @@ function GiftPlanetHub({
     : null;
   const planetFeedback = activePortalMeta
     ? activePortalMeta.travelText
-    : planetWhispers[planetMessageIndex];
+    : litPortal
+      ? planetLoveNotes[litPortal]
+      : planetWhispers[planetMessageIndex];
 
   useEffect(() => {
     return () => {
@@ -1306,10 +1391,17 @@ function GiftPlanetHub({
       if (navigationTimerRef.current !== null) {
         window.clearTimeout(navigationTimerRef.current);
       }
+      if (litTimerRef.current !== null) {
+        window.clearTimeout(litTimerRef.current);
+      }
     };
   }, []);
 
   function speakFromPlanet() {
+    const nextPortal = planetPortals[litPortalIndexRef.current % planetPortals.length];
+    litPortalIndexRef.current = (litPortalIndexRef.current + 1) % planetPortals.length;
+    setLitPortal(nextPortal.id);
+    setFeedbackNoteKey((current) => current + 1);
     setPlanetMessageIndex((current) => {
       if (planetWhispers.length <= 1) {
         return current;
@@ -1321,13 +1413,19 @@ function GiftPlanetHub({
       }
       return next;
     });
-    setPlanetPulse(true);
     if (pulseTimerRef.current !== null) {
       window.clearTimeout(pulseTimerRef.current);
     }
+    if (litTimerRef.current !== null) {
+      window.clearTimeout(litTimerRef.current);
+    }
+    setPlanetPulse(true);
     pulseTimerRef.current = window.setTimeout(() => {
       setPlanetPulse(false);
-    }, 1200);
+    }, 1500);
+    litTimerRef.current = window.setTimeout(() => {
+      setLitPortal(null);
+    }, 3800);
     onBurst("star", 50, 40);
   }
 
@@ -1357,6 +1455,78 @@ function GiftPlanetHub({
   function revealEgg(egg: (typeof easterEggs)[number]) {
     setActiveEgg(egg);
     onBurst(egg.id === "snow" ? "snow" : egg.id === "lock" ? "star" : "petal", 50, 42);
+  }
+
+  function getPointerOrbitAngle(clientX: number, clientY: number) {
+    const rect = planetSystemRef.current?.getBoundingClientRect();
+    if (!rect) {
+      return 0;
+    }
+
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    return (Math.atan2(clientY - centerY, clientX - centerX) * 180) / Math.PI;
+  }
+
+  function beginPlanetDrag(id: PlanetPortalId, event: PointerEvent<HTMLButtonElement>) {
+    if (travelingPortal) {
+      return;
+    }
+
+    dragStateRef.current = {
+      id,
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      hasMoved: false
+    };
+    event.currentTarget.setPointerCapture(event.pointerId);
+  }
+
+  function movePlanetOnTrack(id: PlanetPortalId, event: PointerEvent<HTMLButtonElement>) {
+    const dragState = dragStateRef.current;
+    if (!dragState || dragState.id !== id || dragState.pointerId !== event.pointerId) {
+      return;
+    }
+
+    const distance = Math.hypot(event.clientX - dragState.startX, event.clientY - dragState.startY);
+    if (distance < 6 && !dragState.hasMoved) {
+      return;
+    }
+
+    dragState.hasMoved = true;
+    setDraggingPortal(id);
+    setOrbitPaused(true);
+    const angle = getPointerOrbitAngle(event.clientX, event.clientY);
+    setManualAngles((current) => ({ ...current, [id]: angle }));
+  }
+
+  function endPlanetDrag(id: PlanetPortalId, event: PointerEvent<HTMLButtonElement>) {
+    const dragState = dragStateRef.current;
+    if (!dragState || dragState.id !== id || dragState.pointerId !== event.pointerId) {
+      return;
+    }
+
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+
+    if (dragState.hasMoved) {
+      suppressClickRef.current = id;
+      window.setTimeout(() => {
+        if (suppressClickRef.current === id) {
+          suppressClickRef.current = null;
+        }
+      }, 260);
+    } else if (!activePortal && !travelingPortal) {
+      setOrbitPaused(false);
+    }
+
+    dragStateRef.current = null;
+    setDraggingPortal(null);
+    if (!activePortal && !travelingPortal) {
+      window.setTimeout(() => setOrbitPaused(false), dragState.hasMoved ? 520 : 0);
+    }
   }
 
   function renderVoucherCluster(items: Array<{ title: string; description: string; actionLabel: string; message: string; meta: string }>) {
@@ -1553,7 +1723,10 @@ function GiftPlanetHub({
             style={
               {
                 "--fall-delay": `${index * 120}ms`,
-                "--fall-left": `${(index * 13 + 7) % 100}%`
+                "--fall-left": `${(index * 13 + 7) % 100}%`,
+                "--snow-size": `${4 + (index % 4)}px`,
+                "--snow-duration": `${3600 + (index % 6) * 260}ms`,
+                "--snow-i": String(index)
               } as CSSProperties
             }
           />
@@ -1562,7 +1735,6 @@ function GiftPlanetHub({
 
       <div className="shell planet-hub-shell">
           <div className="planet-hub-heading">
-            <p className="eyebrow">linbao gift planet</p>
             <h1 className="planet-title" aria-label="琳宝的礼物星球">
               {Array.from("琳宝的礼物星球").map((char, index) => (
                 <span aria-hidden="true" key={`${char}-${index}`} style={{ "--char-index": index } as CSSProperties}>
@@ -1573,11 +1745,26 @@ function GiftPlanetHub({
           <p>这里不是普通网页，是 Long 给你藏起来的一小片宇宙。点一点星球，慢慢探索。</p>
         </div>
 
-        <div className="planet-system" aria-label="琳宝的礼物星球入口">
+        <div className="planet-system" aria-label="琳宝的礼物星球入口" ref={planetSystemRef}>
           <div className="planet-orbit-map" aria-hidden="true">
             <span className="system-orbit-ring system-orbit-inner" />
             <span className="system-orbit-ring system-orbit-middle" />
             <span className="system-orbit-ring system-orbit-outer" />
+            {planetPortals.map((portal, index) => (
+              <span
+                className={classNames("planet-personal-track", `personal-track-${portal.orbit}`)}
+                key={`track-${portal.id}`}
+                style={
+                  {
+                    "--track-delay": `${index * -180}ms`,
+                    "--track-height": `calc(${portal.radiusY} * 2)`,
+                    "--track-rotate": portal.trackRotate,
+                    "--track-width": `calc(${portal.radiusX} * 2)`,
+                    "--track-z": String(index)
+                  } as CSSProperties
+                }
+              />
+            ))}
           </div>
 
           <button className="main-gift-planet" type="button" onClick={speakFromPlanet}>
@@ -1595,60 +1782,89 @@ function GiftPlanetHub({
               <span className="main-planet-relief relief-bowl" />
             </span>
             <span className="main-planet-shadow" aria-hidden="true" />
-            <span className="planet-whisper" aria-live="polite">
+            <span className="main-planet-core-effect" aria-hidden="true">
+              <span className="core-ripple core-ripple-one" />
+              <span className="core-ripple core-ripple-two" />
+              <span className="core-ripple core-ripple-three" />
+              <span className="core-stardust core-stardust-one" />
+              <span className="core-stardust core-stardust-two" />
+              <span className="core-stardust core-stardust-three" />
+            </span>
+            <span className="planet-whisper" aria-live="polite" key={feedbackNoteKey}>
               {planetFeedback}
             </span>
           </button>
 
           <div className="planet-satellite-layer">
-            {planetPortals.map((portal, index) => (
-              <div
-                className={classNames(
-                  "gift-orbit-runner",
-                  `orbit-${portal.orbit}`,
-                  activePortal === portal.id && "is-active"
-                )}
-                key={portal.id}
-                style={
-                  {
-                    "--orbit-angle": portal.angle,
-                    "--orbit-duration": portal.duration,
-                    "--orbit-radius-x": portal.radiusX,
-                    "--orbit-radius-y": portal.radiusY,
-                    "--orbit-z": String(planetPortals.length - index)
-                  } as CSSProperties
-                }
-              >
-                <button
+            {planetPortals.map((portal, index) => {
+              const manualAngle = manualAngles[portal.id];
+              const orbitAngle = manualAngle === undefined ? portal.angle : `${manualAngle}deg`;
+              const orbitCounterAngle = manualAngle === undefined ? portal.counterAngle : `${-manualAngle}deg`;
+
+              return (
+                <div
                   className={classNames(
-                    "gift-satellite",
-                    `satellite-${portal.tone}`,
-                    activePortal === portal.id && "is-active"
+                    "gift-orbit-runner",
+                    `orbit-${portal.orbit}`,
+                    activePortal === portal.id && "is-active",
+                    litPortal === portal.id && "is-lit",
+                    draggingPortal === portal.id && "is-dragging"
                   )}
-                  onClick={() => selectPortal(portal.id)}
+                  key={portal.id}
                   style={
                     {
-                      "--orbit-angle": portal.angle,
-                      "--orbit-counter-angle": portal.counterAngle,
-                      "--orbit-duration": portal.duration
+                      "--orbit-angle": orbitAngle,
+                      "--orbit-duration": portal.duration,
+                      "--orbit-radius-x": portal.radiusX,
+                      "--orbit-radius-y": portal.radiusY,
+                      "--orbit-track-rotate": portal.trackRotate,
+                      "--orbit-z": String(planetPortals.length - index)
                     } as CSSProperties
                   }
-                  type="button"
                 >
-                  <span className="satellite-shell" aria-hidden="true">
-                    <span className="satellite-halo" />
-                    <span className="satellite-planet-ring satellite-ring-back" />
-                    <span className="satellite-inner-ring" />
-                    <span className="satellite-core">
-                      <span>{portal.glyph}</span>
+                  <button
+                    className={classNames(
+                      "gift-satellite",
+                      `satellite-${portal.tone}`,
+                      activePortal === portal.id && "is-active",
+                      litPortal === portal.id && "is-lit",
+                      draggingPortal === portal.id && "is-dragging"
+                    )}
+                    onClick={() => {
+                      if (suppressClickRef.current === portal.id) {
+                        suppressClickRef.current = null;
+                        return;
+                      }
+                      selectPortal(portal.id);
+                    }}
+                    onPointerCancel={(event) => endPlanetDrag(portal.id, event)}
+                    onPointerDown={(event) => beginPlanetDrag(portal.id, event)}
+                    onPointerMove={(event) => movePlanetOnTrack(portal.id, event)}
+                    onPointerUp={(event) => endPlanetDrag(portal.id, event)}
+                    style={
+                      {
+                        "--orbit-angle": orbitAngle,
+                        "--orbit-counter-angle": orbitCounterAngle,
+                        "--orbit-duration": portal.duration
+                      } as CSSProperties
+                    }
+                    type="button"
+                  >
+                    <span className="satellite-shell" aria-hidden="true">
+                      <span className="satellite-halo" />
+                      <span className="satellite-planet-ring satellite-ring-back" />
+                      <span className="satellite-inner-ring" />
+                      <span className="satellite-core">
+                        <span className={classNames("satellite-icon", `satellite-icon-${portal.icon}`)} />
+                      </span>
+                      <span className="satellite-planet-ring satellite-ring-front" />
+                      <span className="satellite-sparkle" />
                     </span>
-                    <span className="satellite-planet-ring satellite-ring-front" />
-                    <span className="satellite-sparkle" />
-                  </span>
-                  <span className="satellite-label">{portal.label}</span>
-                </button>
-              </div>
-            ))}
+                    <span className="satellite-label">{portal.label}</span>
+                  </button>
+                </div>
+              );
+            })}
           </div>
 
           <div className="planet-easter-layer">
@@ -1661,7 +1877,7 @@ function GiftPlanetHub({
                 style={{ "--egg-x": egg.x, "--egg-y": egg.y } as CSSProperties}
                 type="button"
               >
-                {egg.glyph}
+                <span className={classNames("easter-icon", `easter-icon-${egg.icon}`)} aria-hidden="true" />
               </button>
             ))}
           </div>
@@ -2277,6 +2493,8 @@ export function GiftExperience() {
           </div>
 
           <div className={classNames("intro-cake-stage", (introStage === "cake" || introStage === "opening") && "is-visible")}>
+            {introOpening ? <BirthdayCakeFountains /> : null}
+
             <button
               aria-label="打开生日礼物世界"
               className="intro-cake-button"
@@ -2306,7 +2524,7 @@ export function GiftExperience() {
                     setWeddingAnswer(event.target.value);
                     setWeddingRiddleError(false);
                   }}
-                  placeholder="例如 2024年2月12日 或 20240212"
+                  placeholder="例如 2024年2月12日 / 20240212"
                   type="text"
                   value={weddingAnswer}
                 />
