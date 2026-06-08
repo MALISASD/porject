@@ -1,6 +1,55 @@
 import { LoveEventForm } from "@/components/planet-interactions";
 import { PlanetPageShell } from "@/components/planet-page-shell";
+import { StarBoxGiftShelf } from "@/components/star-box";
 import { giftExperienceCopy } from "@/data/site";
+
+const beijingStarBoxGifts = [
+  {
+    id: "beijing-late-june",
+    title: "六月底北京见",
+    fromPlanet: "下一站星",
+    type: "wish" as const,
+    status: "北京见面后兑现" as const,
+    description: "网页先送你一半，剩下的一半等你来北京，我想当面给你。",
+    icon: "京"
+  },
+  {
+    id: "beijing-meeting-gift",
+    title: "北京见面礼",
+    fromPlanet: "下一站星",
+    type: "gift" as const,
+    status: "先保密" as const,
+    description: "这份先不说破，等你到了北京，我想亲手交给你。",
+    icon: "盒"
+  },
+  {
+    id: "beijing-other-half",
+    title: "另一半生日惊喜",
+    fromPlanet: "下一站星",
+    type: "gift" as const,
+    status: "北京见面后兑现" as const,
+    description: "这是留给见面那天的部分，让生日礼物不只停在网页里。",
+    icon: "星"
+  },
+  {
+    id: "beijing-first-dinner",
+    title: "北京第一顿饭",
+    fromPlanet: "下一站星",
+    type: "coupon" as const,
+    status: "北京见面后兑现" as const,
+    description: "你负责说想吃什么，路线、排队和安排都交给 Long。",
+    icon: "饭"
+  },
+  {
+    id: "beijing-little-surprise",
+    title: "北京小惊喜",
+    fromPlanet: "下一站星",
+    type: "gift" as const,
+    status: "先保密" as const,
+    description: "给六月底留一点期待，也给见面那天留一点发光的余地。",
+    icon: "光"
+  }
+];
 
 export default function BeijingPage() {
   return (
@@ -49,6 +98,11 @@ export default function BeijingPage() {
           title="来北京期待"
         />
       </section>
+      <StarBoxGiftShelf
+        title="先放进星盒的北京承诺"
+        description="这些会等你来北京后，慢慢从网页变成真的饭、真的礼物和真的见面。"
+        gifts={beijingStarBoxGifts}
+      />
     </PlanetPageShell>
   );
 }

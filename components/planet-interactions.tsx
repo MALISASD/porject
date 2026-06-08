@@ -5,6 +5,8 @@ import { useEffect, useRef, useState } from "react";
 
 import type { DailyCoupon, MysteryPrize } from "@/data/site";
 import { submitLoveEvent } from "@/lib/love-events";
+import type { StarBoxGiftInput } from "@/components/star-box";
+import { useStarBox } from "@/components/star-box";
 
 type GiftBoxesProps = {
   boxes: string[];
@@ -378,6 +380,68 @@ function getStorage() {
   }
 }
 
+function getGiftStatus(title: string, description: string): StarBoxGiftInput["status"] {
+  const text = `${title} ${description}`;
+  if (text.includes("长期") || text.includes("无限")) {
+    return "长期有效";
+  }
+  if (text.includes("北京") || text.includes("六月底") || text.includes("见面")) {
+    return "北京见面后兑现";
+  }
+  if (text.includes("保密") || text.includes("神秘")) {
+    return "先保密";
+  }
+  if (text.includes("今天") || text.includes("红包") || text.includes("奶茶") || text.includes("甜品")) {
+    return "今天可兑现";
+  }
+  return "已收到";
+}
+
+function getGiftType(title: string, description: string): StarBoxGiftInput["type"] {
+  const text = `${title} ${description}`;
+  if (text.includes("愿望") || text.includes("基金") || text.includes("清单") || text.includes("预约")) {
+    return "wish";
+  }
+  if (text.includes("纪念") || text.includes("记忆") || text.includes("那一天")) {
+    return "memory";
+  }
+  if (text.includes("券") || text.includes("权") || text.includes("单")) {
+    return "coupon";
+  }
+  return "gift";
+}
+
+function getGiftIcon(title: string): string {
+  if (title.includes("红包")) return "红";
+  if (title.includes("火锅") || title.includes("蘑菇") || title.includes("饭")) return "汤";
+  if (title.includes("奶茶") || title.includes("甜品")) return "甜";
+  if (title.includes("抱") || title.includes("哄") || title.includes("陪")) return "抱";
+  if (title.includes("电影") || title.includes("观影") || title.includes("影院")) return "影";
+  if (title.includes("北京") || title.includes("见面")) return "京";
+  if (title.includes("海")) return "海";
+  if (title.includes("信") || title.includes("话")) return "信";
+  if (title.includes("同心锁")) return "锁";
+  if (title.includes("生日") || title.includes("那一天")) return "日";
+  return "星";
+}
+
+function toStarBoxGift(
+  item: { title: string; description: string },
+  planet: string,
+  overrides: Partial<StarBoxGiftInput> = {}
+): StarBoxGiftInput {
+  return {
+    id: `${planet}-${item.title}`.replace(/\s+/g, "-"),
+    title: item.title,
+    fromPlanet: planet,
+    type: getGiftType(item.title, item.description),
+    status: getGiftStatus(item.title, item.description),
+    description: item.description,
+    icon: getGiftIcon(item.title),
+    ...overrides
+  };
+}
+
 export function GiftBoxes({ boxes, prizes }: GiftBoxesProps) {
   const [selectedBox, setSelectedBox] = useState<string | null>(null);
   const [result, setResult] = useState<MysteryPrize | null>(null);
@@ -463,6 +527,7 @@ function getRandomFortuneResult() {
 }
 
 export function StarFortuneMachine() {
+  const { addGift } = useStarBox();
   const [result, setResult] = useState<FortuneResult | null>(null);
   const [pendingResult, setPendingResult] = useState<FortuneResult | null>(null);
   const [isSpinning, setIsSpinning] = useState(false);
@@ -510,6 +575,22 @@ export function StarFortuneMachine() {
         setPendingResult(null);
         setIsSpinning(false);
         getStorage()?.setItem(STAR_FORTUNE_KEY, nextResult.id);
+        addGift({
+          id: `星运礼物机-${nextResult.id}`,
+          title: nextResult.title,
+          fromPlanet: "惊喜仓星",
+          type: nextResult.category === "未来愿望基金" ? "wish" : "gift",
+          status:
+            nextResult.redeem === "来北京后兑现"
+              ? "北京见面后兑现"
+              : nextResult.redeem === "长期有效" || nextResult.redeem === "永久有效"
+                ? "长期有效"
+                : nextResult.redeem === "未来认真规划"
+                  ? "先保密"
+                  : "今天可兑现",
+          description: nextResult.description,
+          icon: getGiftIcon(nextResult.title)
+        });
         void submitLoveEvent({
           eventType: "star_fortune_reveal",
           planet: "惊喜仓星",
@@ -620,26 +701,48 @@ function GiftFlipCard({
   isActive: boolean;
   onToggle: (id: string) => void;
 }) {
+  const { addGift } = useStarBox();
+
   return (
-    <button
-      className={["gift-flip-card", isActive && "is-flipped", `gift-tone-${item.tone}`].filter(Boolean).join(" ")}
-      onClick={() => onToggle(item.id)}
-      type="button"
-    >
-      <span className="gift-flip-card-inner">
-        <span className="gift-card-face gift-card-front">
-          <span className="gift-card-token">{item.token}</span>
-          <span className="card-meta">{item.category}</span>
-          <strong>{item.title}</strong>
-          <span>{item.short}</span>
+    <article className={["gift-flip-card", isActive && "is-flipped", `gift-tone-${item.tone}`].filter(Boolean).join(" ")}>
+      <button className="gift-flip-card-main" onClick={() => onToggle(item.id)} type="button">
+        <span className="gift-flip-card-inner">
+          <span className="gift-card-face gift-card-front">
+            <span className="gift-card-token">{item.token}</span>
+            <span className="card-meta">{item.category}</span>
+            <strong>{item.title}</strong>
+            <span>{item.short}</span>
+          </span>
+          <span className="gift-card-face gift-card-back">
+            <span className="card-meta">打开后的纸条</span>
+            <strong>{item.title}</strong>
+            <span>{item.detail}</span>
+          </span>
         </span>
-        <span className="gift-card-face gift-card-back">
-          <span className="card-meta">打开后的纸条</span>
-          <strong>{item.title}</strong>
-          <span>{item.detail}</span>
-        </span>
-      </span>
-    </button>
+      </button>
+      <button
+        className="star-box-add-button gift-card-star-box-button"
+        onClick={() =>
+          addGift({
+            id: `惊喜仓星-${item.id}`,
+            title: item.title,
+            fromPlanet: "惊喜仓星",
+            type: item.category === "未来愿望基金" ? "wish" : "gift",
+            status:
+              item.category === "北京见面兑现"
+                ? "北京见面后兑现"
+                : item.category === "未来愿望基金"
+                  ? "先保密"
+                  : getGiftStatus(item.title, item.detail),
+            description: item.detail,
+            icon: getGiftIcon(item.title)
+          })
+        }
+        type="button"
+      >
+        收进星盒
+      </button>
+    </article>
   );
 }
 
@@ -717,6 +820,7 @@ export function GiftPromiseConstellation() {
 }
 
 export function CouponCluster({ eventType = "coupon_claim", items, planet = "礼物星球" }: CouponClusterProps) {
+  const { addGift } = useStarBox();
   const [claimed, setClaimed] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
@@ -745,6 +849,7 @@ export function CouponCluster({ eventType = "coupon_claim", items, planet = "礼
       value: item.actionLabel,
       message: item.message
     });
+    addGift(toStarBoxGift(item, planet, { description: item.description, type: "coupon" }));
   }
 
   return (
@@ -765,6 +870,7 @@ export function CouponCluster({ eventType = "coupon_claim", items, planet = "礼
 }
 
 export function MessageStarForm() {
+  const { addGift } = useStarBox();
   const [message, setMessage] = useState("");
   const [savedMessage, setSavedMessage] = useState("");
 
@@ -789,6 +895,15 @@ export function MessageStarForm() {
       title: "给 Long 留一句话",
       value: trimmed,
       message: trimmed
+    });
+    addGift({
+      id: `悄悄话星-${trimmed.slice(0, 18)}`,
+      title: "琳宝留下的一句话",
+      fromPlanet: "悄悄话星",
+      type: "message",
+      status: "已收到",
+      description: `“${trimmed}”`,
+      icon: "信"
     });
   }
 
@@ -823,6 +938,7 @@ export function LoveEventForm({
   placeholder,
   title
 }: LoveEventFormProps) {
+  const { addGift } = useStarBox();
   const [value, setValue] = useState("");
   const [saved, setSaved] = useState("");
 
@@ -841,6 +957,15 @@ export function LoveEventForm({
       title,
       value: trimmed,
       message: trimmed
+    });
+    addGift({
+      id: `${planet}-${eventType}-${trimmed.slice(0, 18)}`,
+      title,
+      fromPlanet: planet,
+      type: "wish",
+      status: planet.includes("北京") || planet.includes("下一站") ? "北京见面后兑现" : "已收到",
+      description: trimmed,
+      icon: getGiftIcon(title)
     });
   }
 

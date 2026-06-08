@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
 
 import { PlanetPageShell } from "@/components/planet-page-shell";
+import { StarBoxGiftShelf } from "@/components/star-box";
 import { birthDayData } from "@/data/site";
 
 const dateItems = [
@@ -9,6 +10,18 @@ const dateItems = [
   { label: "星期", value: birthDayData.weekday },
   { label: "生肖", value: birthDayData.zodiac },
   { label: "星座", value: birthDayData.constellation }
+];
+
+const birthDayStarBoxGifts = [
+  {
+    id: "birth-day-memory-card",
+    title: "那一天纪念卡",
+    fromPlanet: "那一天星",
+    type: "memory" as const,
+    status: "已收到" as const,
+    description: "1999 年 6 月 8 日，星期二。那一天你来到世界，很多年后我才终于遇见你。",
+    icon: "日"
+  }
 ];
 
 export default function BirthDayPage() {
@@ -69,6 +82,12 @@ export default function BirthDayPage() {
         <section className="planet-soft-zone birth-ending-note">
           <p>{birthDayData.ending}</p>
         </section>
+
+        <StarBoxGiftShelf
+          title="把那一天收进星盒"
+          description="这不是历史卡片，是 Long 想认真记住的生日坐标。"
+          gifts={birthDayStarBoxGifts}
+        />
       </div>
     </PlanetPageShell>
   );

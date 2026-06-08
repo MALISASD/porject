@@ -4,7 +4,7 @@ import { dailyCoupons } from "@/data/site";
 
 const foodCoupons = [
   {
-    title: "萨莉亚蘑菇汤记忆券",
+    title: "萨莉亚蘑菇汤永久优先权",
     description: "在上海陪你吃饭，最绕不开的就是萨莉亚，还有你每次都要点的蘑菇汤。我会一直记得你爱吃什么。",
     actionLabel: "收下蘑菇汤星",
     message: "蘑菇汤星已经收好。",

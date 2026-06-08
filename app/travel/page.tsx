@@ -1,8 +1,57 @@
 import { MediaMemoryGrid } from "@/components/media-memory-grid";
 import { PlanetPageShell } from "@/components/planet-page-shell";
+import { StarBoxGiftShelf } from "@/components/star-box";
 import type { MemoryMedia } from "@/data/site";
 
 const seaWishList = ["去海边住一晚", "一起看日落", "吃一顿海鲜", "拍一组照片", "什么都不赶，慢慢走"];
+
+const travelStarBoxGifts = [
+  {
+    id: "travel-sea-wish",
+    title: "看海旅行愿望",
+    fromPlanet: "看海星",
+    type: "wish" as const,
+    status: "先保密" as const,
+    description: "以后想带你去看一次真正不用赶时间的大海。",
+    icon: "海"
+  },
+  {
+    id: "travel-one-night",
+    title: "海边住一晚",
+    fromPlanet: "看海星",
+    type: "wish" as const,
+    status: "先保密" as const,
+    description: "不用当天来回，找一个舒服的地方，慢慢听海风。",
+    icon: "宿"
+  },
+  {
+    id: "travel-sunset",
+    title: "一起看日落",
+    fromPlanet: "看海星",
+    type: "wish" as const,
+    status: "先保密" as const,
+    description: "等太阳慢慢落下去的时候，我想站在你旁边。",
+    icon: "落"
+  },
+  {
+    id: "travel-seafood",
+    title: "一起吃海鲜",
+    fromPlanet: "看海星",
+    type: "wish" as const,
+    status: "先保密" as const,
+    description: "找一家不用赶时间的小店，吃点热乎又新鲜的东西。",
+    icon: "鲜"
+  },
+  {
+    id: "travel-slow-walk",
+    title: "什么都不赶，慢慢走",
+    fromPlanet: "看海星",
+    type: "wish" as const,
+    status: "先保密" as const,
+    description: "这就是我最想补给你的旅行：没有催促，只有我们。",
+    icon: "慢"
+  }
+];
 
 const travelMedia: MemoryMedia[] = [
   {
@@ -69,6 +118,12 @@ export default function TravelPage() {
           <h2>海边照片和视频预留</h2>
           <MediaMemoryGrid items={travelMedia} />
         </section>
+
+        <StarBoxGiftShelf
+          title="先收进星盒的看海愿望"
+          description="这些愿望先放进星盒，等以后挑一个不赶时间的日子慢慢兑现。"
+          gifts={travelStarBoxGifts}
+        />
       </div>
     </PlanetPageShell>
   );

@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 
 import { LoveEventsNetlifyForm } from "@/components/love-events-netlify-form";
 import { SiteFooter, SiteHeader } from "@/components/site-shell";
+import { StarBoxProvider } from "@/components/star-box";
 import { siteConfig } from "@/data/site";
 
 import "./globals.css";
@@ -38,12 +39,14 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="zh-CN" data-scroll-behavior="smooth">
       <body>
         <div className="site-bg" />
-        <div className="site-frame">
-          <SiteHeader />
-          <main className="page-shell">{children}</main>
-          <SiteFooter />
-          <LoveEventsNetlifyForm />
-        </div>
+        <StarBoxProvider>
+          <div className="site-frame">
+            <SiteHeader />
+            <main className="page-shell">{children}</main>
+            <SiteFooter />
+            <LoveEventsNetlifyForm />
+          </div>
+        </StarBoxProvider>
       </body>
     </html>
   );

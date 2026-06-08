@@ -24,6 +24,13 @@ const hugCoupons = [
     actionLabel: "收下最大券",
     message: "今天你最大券已经收好。",
     meta: "queen mode"
+  },
+  {
+    title: "不想说话也可以靠近我",
+    description: "有些时候不用解释太多。你可以先靠近我，等舒服一点了再慢慢说。",
+    actionLabel: "收下靠近券",
+    message: "不想说话也可以靠近我，Long 已经记下。",
+    meta: "quiet hug"
   }
 ];
 
