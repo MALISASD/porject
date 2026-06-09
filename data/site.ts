@@ -649,7 +649,7 @@ export const memoriesMedia: MemoryMedia[] = [
     title: "杭州旅行",
     date: "2024",
     description: "西湖、茶山、醉虾，之后可以把旅行照片慢慢放进来。",
-    src: "/images/hangzhou-2024-placeholder.jpg",
+    src: "/images/memories/hangzhou-2024-placeholder.jpg",
     category: "杭州"
   },
   {
@@ -659,7 +659,7 @@ export const memoriesMedia: MemoryMedia[] = [
     date: "2025-03",
     description: "跨过长江大桥，坐船去看海，这里以后可以放那段热闹日子的照片和视频。",
     src: "/videos/shengsi-2025-placeholder.mp4",
-    poster: "/images/shengsi-2025-poster.jpg",
+    poster: "/images/memories/shengsi-2025-poster.jpg",
     category: "嵊泗岛"
   },
   {
@@ -668,7 +668,7 @@ export const memoriesMedia: MemoryMedia[] = [
     title: "苏州七里山塘",
     date: "2025-06-21",
     description: "那天你写下爱我，这里以后可以放那封信或那天的照片。",
-    src: "/images/shantang-letter-2025-placeholder.jpg",
+    src: "/images/memories/shantang-letter-2025-placeholder.jpg",
     category: "苏州"
   },
   {
@@ -678,7 +678,7 @@ export const memoriesMedia: MemoryMedia[] = [
     date: "2025-12",
     description: "浔阳楼、浔阳江、庐山，还有那晚共享电驴上的幸福感。",
     src: "/videos/jiujiang-lushan-2025-placeholder.mp4",
-    poster: "/images/jiujiang-lushan-2025-poster.jpg",
+    poster: "/images/memories/jiujiang-lushan-2025-poster.jpg",
     category: "九江"
   },
   {
@@ -687,7 +687,7 @@ export const memoriesMedia: MemoryMedia[] = [
     title: "过年玩雪",
     date: "2026",
     description: "一起玩雪、吃饭、转亲戚，那些不总顺但继续往前走的日子。",
-    src: "/images/new-year-snow-2026-placeholder.jpg",
+    src: "/images/memories/new-year-snow-2026-placeholder.jpg",
     category: "过年"
   },
   {
@@ -696,7 +696,7 @@ export const memoriesMedia: MemoryMedia[] = [
     title: "婚礼和成为家人",
     date: "2025",
     description: "从初三到初十，中间隔着一整年春夏秋冬，最后你成了我的家人。",
-    src: "/images/wedding-2025-placeholder.jpg",
+    src: "/images/memories/wedding-2025-placeholder.jpg",
     category: "婚礼"
   },
   {
@@ -706,7 +706,7 @@ export const memoriesMedia: MemoryMedia[] = [
     date: "2024-2026",
     description: "萨莉亚、蘑菇汤、外滩、汤圆和很多吵吵闹闹又甜甜蜜蜜的日常。",
     src: "/videos/shanghai-daily-placeholder.mp4",
-    poster: "/images/shanghai-daily-poster.jpg",
+    poster: "/images/memories/shanghai-daily-poster.jpg",
     category: "上海"
   }
 ];

@@ -2120,7 +2120,7 @@ function BirthdayAccessGate({ onUnlock }: { onUnlock: () => void }) {
 }
 
 export function GiftExperience() {
-  const [accessChecked, setAccessChecked] = useState(false);
+  const [accessChecked, setAccessChecked] = useState(true);
   const [accessGranted, setAccessGranted] = useState(false);
   const [hasOpened, setHasOpened] = useState(false);
   const [introStage, setIntroStage] = useState<IntroStage>("cover");
