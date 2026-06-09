@@ -6023,6 +6023,7 @@ body[data-gift-state="closed"] .page-shell,
 
 .fortune-symbol-final,
 .gift-card-token,
+.gift-card-secret-icon,
 .wish-capsule span {
   border-color: color-mix(in srgb, var(--gift-accent, rgba(232, 216, 178, 0.72)) 42%, transparent);
   background:
@@ -6165,7 +6166,7 @@ body[data-gift-state="closed"] .page-shell,
 }
 
 .gift-flip-card {
-  min-height: 214px;
+  min-height: 260px;
   padding: 0;
   border: 0;
   color: inherit;
@@ -6176,7 +6177,7 @@ body[data-gift-state="closed"] .page-shell,
 .gift-flip-card-main {
   display: block;
   width: 100%;
-  min-height: 214px;
+  min-height: 260px;
   padding: 0;
   border: 0;
   color: inherit;
@@ -6189,13 +6190,21 @@ body[data-gift-state="closed"] .page-shell,
   display: block;
   width: 100%;
   height: 100%;
-  min-height: 214px;
+  min-height: 260px;
   transform-style: preserve-3d;
   transition: transform 620ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .gift-flip-card.is-flipped .gift-flip-card-inner {
   transform: rotateY(180deg);
+}
+
+.gift-flip-card.is-flipped .gift-card-reveal-face {
+  border-color: color-mix(in srgb, var(--gift-accent, rgba(232, 216, 178, 0.7)) 44%, transparent);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 20px 54px rgba(20, 10, 30, 0.24),
+    0 0 38px var(--gift-glow, rgba(232, 216, 178, 0.18));
 }
 
 .gift-card-face {
@@ -6236,6 +6245,128 @@ body[data-gift-state="closed"] .page-shell,
   border-color: color-mix(in srgb, var(--gift-accent, rgba(232, 216, 178, 0.7)) 32%, transparent);
 }
 
+.gift-card-secret-face {
+  place-items: center;
+  align-content: center;
+  gap: 12px;
+  text-align: center;
+  background:
+    radial-gradient(circle at 50% 30%, color-mix(in srgb, var(--gift-accent, rgba(232, 216, 178, 0.72)) 22%, transparent), transparent 34%),
+    radial-gradient(circle at 18% 82%, rgba(255, 243, 234, 0.1), transparent 28%),
+    linear-gradient(145deg, rgba(255, 243, 234, 0.12), rgba(207, 164, 255, 0.06)),
+    rgba(255, 243, 234, 0.07);
+}
+
+.gift-card-secret-face::before,
+.gift-card-reveal-face::before {
+  content: "";
+  position: absolute;
+  inset: 18px;
+  border: 1px dashed color-mix(in srgb, var(--gift-accent, rgba(232, 216, 178, 0.72)) 30%, transparent);
+  border-radius: 20px;
+  pointer-events: none;
+}
+
+.gift-card-reveal-face::before {
+  inset: auto 20px 18px auto;
+  width: 64px;
+  height: 18px;
+  border-style: solid;
+  border-radius: 999px;
+  opacity: 0.5;
+  transform: rotate(-12deg);
+}
+
+.gift-card-secret-icon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  border: 1px solid rgba(255, 243, 234, 0.16);
+  border-radius: 28px;
+  color: #fff3ea;
+  font-size: 2.15rem;
+  line-height: 1;
+}
+
+.gift-card-secret-icon::before {
+  content: "✦";
+  position: relative;
+  z-index: 1;
+  text-shadow: 0 0 20px var(--gift-glow, rgba(232, 216, 178, 0.22));
+}
+
+.gift-card-secret-icon::after {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--gift-accent, rgba(232, 216, 178, 0.72)) 38%, transparent);
+  transform: rotate(-18deg) scaleX(1.42);
+  opacity: 0.54;
+}
+
+.gift-secret-ribbon::before {
+  content: "⋈";
+}
+
+.gift-secret-star::before,
+.gift-secret-star-box::before {
+  content: "✦";
+}
+
+.gift-secret-heart::before {
+  content: "♡";
+}
+
+.gift-secret-cup::before,
+.gift-secret-warm::before {
+  content: "◒";
+}
+
+.gift-secret-crown::before {
+  content: "♕";
+}
+
+.gift-secret-ticket::before,
+.gift-secret-note::before {
+  content: "▱";
+}
+
+.gift-secret-moon::before {
+  content: "☾";
+}
+
+.gift-secret-gift::before {
+  content: "◇";
+}
+
+.gift-secret-flower::before {
+  content: "✿";
+}
+
+.gift-secret-shell::before {
+  content: "◜";
+}
+
+.gift-card-secret-label {
+  max-width: 13em;
+  color: rgba(255, 243, 234, 0.86);
+  font-weight: 700;
+  line-height: 1.65;
+}
+
+.gift-card-secret-hint {
+  min-height: 34px;
+  padding: 7px 14px;
+  border: 1px solid rgba(255, 243, 234, 0.14);
+  border-radius: 999px;
+  color: rgba(255, 243, 234, 0.68);
+  background: rgba(255, 243, 234, 0.07);
+  font-size: 0.88rem;
+}
+
 .gift-card-token {
   display: grid;
   place-items: center;
@@ -6253,7 +6384,7 @@ body[data-gift-state="closed"] .page-shell,
   line-height: 1.35;
 }
 
-.gift-card-face span:not(.card-meta):not(.gift-card-token) {
+.gift-card-face span:not(.card-meta):not(.gift-card-token):not(.gift-card-secret-icon):not(.gift-card-secret-label):not(.gift-card-secret-hint) {
   color: rgba(255, 243, 234, 0.72);
   line-height: 1.7;
 }
@@ -7449,8 +7580,9 @@ body[data-gift-state="closed"] .page-shell,
   }
 
   .gift-flip-card,
+  .gift-flip-card-main,
   .gift-flip-card-inner {
-    min-height: 194px;
+    min-height: 238px;
   }
 
   .wish-capsule-layout {

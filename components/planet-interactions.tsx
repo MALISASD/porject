@@ -425,6 +425,29 @@ function getGiftIcon(title: string): string {
   return "星";
 }
 
+const giftSecretMarks: Record<string, { icon: string; label: string }> = {
+  "pool-red-52": { icon: "ribbon", label: "小礼结" },
+  "pool-red-66": { icon: "star", label: "好运星" },
+  "pool-red-88": { icon: "heart", label: "偏爱心" },
+  "pool-milk-tea": { icon: "cup", label: "甜甜杯" },
+  "pool-hug": { icon: "heart", label: "抱抱心" },
+  "pool-queen": { icon: "crown", label: "小皇冠" },
+  "pool-hotpot": { icon: "warm", label: "暖光碗" },
+  "pool-cinema": { icon: "ticket", label: "电影票" },
+  "pool-night": { icon: "moon", label: "月亮" },
+  "pool-meet-gift": { icon: "gift", label: "小礼盒" },
+  "pool-first-surprise": { icon: "flower", label: "花朵" },
+  "pool-console": { icon: "star-box", label: "星星礼盒" },
+  "pool-notebook": { icon: "note", label: "星光卡片" },
+  "pool-sea": { icon: "shell", label: "小贝壳" },
+  "pool-secret": { icon: "gift", label: "压轴礼盒" },
+  "pool-love": { icon: "heart", label: "大桃心" }
+};
+
+function getGiftSecretMark(item: GiftPoolItem) {
+  return giftSecretMarks[item.id] ?? { icon: "star", label: "小星星" };
+}
+
 function toStarBoxGift(
   item: { title: string; description: string },
   planet: string,
@@ -702,20 +725,27 @@ function GiftFlipCard({
   onToggle: (id: string) => void;
 }) {
   const { addGift } = useStarBox();
+  const secretMark = getGiftSecretMark(item);
 
   return (
     <article className={["gift-flip-card", isActive && "is-flipped", `gift-tone-${item.tone}`].filter(Boolean).join(" ")}>
-      <button className="gift-flip-card-main" onClick={() => onToggle(item.id)} type="button">
+      <button
+        aria-label={isActive ? `${item.title} 已拆开` : `拆开一张${secretMark.label}礼物卡`}
+        aria-pressed={isActive}
+        className="gift-flip-card-main"
+        onClick={() => onToggle(item.id)}
+        type="button"
+      >
         <span className="gift-flip-card-inner">
-          <span className="gift-card-face gift-card-front">
-            <span className="gift-card-token">{item.token}</span>
-            <span className="card-meta">{item.category}</span>
+          <span className="gift-card-face gift-card-front gift-card-secret-face">
+            <span className={`gift-card-secret-icon gift-secret-${secretMark.icon}`} aria-hidden="true" />
+            <span className="gift-card-secret-label">有些礼物，应该亲手拆开</span>
+            <span className="gift-card-secret-hint">点我拆开</span>
+          </span>
+          <span className="gift-card-face gift-card-back gift-card-reveal-face">
+            <span className="card-meta">这一份偏爱，被你打开了</span>
             <strong>{item.title}</strong>
             <span>{item.short}</span>
-          </span>
-          <span className="gift-card-face gift-card-back">
-            <span className="card-meta">打开后的纸条</span>
-            <strong>{item.title}</strong>
             <span>{item.detail}</span>
           </span>
         </span>
@@ -747,7 +777,7 @@ function GiftFlipCard({
 }
 
 export function GiftPromiseConstellation() {
-  const [flippedId, setFlippedId] = useState<string | null>(null);
+  const [flippedCards, setFlippedCards] = useState<Record<string, boolean>>({});
   const [selectedWishId, setSelectedWishId] = useState("pool-console");
 
   const instantItems = giftPoolItems.filter((item) => item.category === "即时惊喜");
@@ -756,7 +786,7 @@ export function GiftPromiseConstellation() {
   const selectedWish = wishItems.find((item) => item.id === selectedWishId) ?? wishItems[0];
 
   function toggleFlip(id: string) {
-    setFlippedId((current) => (current === id ? null : id));
+    setFlippedCards((current) => ({ ...current, [id]: !current[id] }));
   }
 
   return (
@@ -769,7 +799,7 @@ export function GiftPromiseConstellation() {
         </div>
         <div className="gift-flip-grid">
           {instantItems.map((item) => (
-            <GiftFlipCard item={item} isActive={flippedId === item.id} key={item.id} onToggle={toggleFlip} />
+            <GiftFlipCard item={item} isActive={Boolean(flippedCards[item.id])} key={item.id} onToggle={toggleFlip} />
           ))}
         </div>
       </section>
@@ -782,7 +812,7 @@ export function GiftPromiseConstellation() {
         </div>
         <div className="gift-flip-grid gift-flip-grid-wide">
           {beijingItems.map((item) => (
-            <GiftFlipCard item={item} isActive={flippedId === item.id} key={item.id} onToggle={toggleFlip} />
+            <GiftFlipCard item={item} isActive={Boolean(flippedCards[item.id])} key={item.id} onToggle={toggleFlip} />
           ))}
         </div>
       </section>

@@ -2007,8 +2007,10 @@ function BirthdayAccessGate({ onUnlock }: { onUnlock: () => void }) {
   const [secretClicks, setSecretClicks] = useState(0);
   const [secretVisible, setSecretVisible] = useState(false);
   const [remaining, setRemaining] = useState(() => getBirthdayGateRemaining());
+  const [previewOpen, setPreviewOpen] = useState(false);
   const secretClicksRef = useRef(0);
-  const isOpen = remaining <= 0;
+  const lastSecretTapRef = useRef(0);
+  const isOpen = previewOpen || remaining <= 0;
 
   useEffect(() => {
     const timer = window.setInterval(() => {
@@ -2034,8 +2036,19 @@ function BirthdayAccessGate({ onUnlock }: { onUnlock: () => void }) {
       secretClicksRef.current = 0;
       setSecretClicks(0);
       setSecretVisible(false);
-      unlockGate();
+      setHasError(false);
+      setPreviewOpen(true);
     }
+  }
+
+  function handleSecretTitleTap() {
+    const now = Date.now();
+    if (now - lastSecretTapRef.current < 120) {
+      return;
+    }
+
+    lastSecretTapRef.current = now;
+    revealSecretEntry();
   }
 
   function submitAccessCode(event: FormEvent<HTMLFormElement>) {
@@ -2061,7 +2074,12 @@ function BirthdayAccessGate({ onUnlock }: { onUnlock: () => void }) {
 
       <div className="birthday-access-card">
         <p className="eyebrow">private birthday planet</p>
-        <button className="birthday-access-title-button" onClick={revealSecretEntry} type="button">
+        <button
+          className="birthday-access-title-button"
+          onClick={handleSecretTitleTap}
+          onPointerUp={handleSecretTitleTap}
+          type="button"
+        >
           <h1>琳宝的生日星球正在准备中</h1>
         </button>
         <p className="birthday-access-subtitle">等零点一到，这片小宇宙就会自己为你打开。</p>
@@ -2114,6 +2132,8 @@ function BirthdayAccessGate({ onUnlock }: { onUnlock: () => void }) {
         <p className="birthday-access-hint" aria-live="polite">
           {hasError
             ? "暗号不对，再想想和生日有关的数字。"
+            : previewOpen
+              ? "测试入口已打开，点一下就能进入礼物星球。"
             : secretVisible
               ? "这是 Long 留给自己测试的小入口。"
               : "生日星球会在北京时间 2026 年 6 月 10 日 00:00 打开。"}
