@@ -89,7 +89,9 @@ const COUPON_KEY = "linbao-giftbox-coupons";
 const COUPON_PACK_KEY = "linbao-giftbox-coupon-pack";
 const MESSAGE_KEY = "linbao-giftbox-message";
 const ACCESS_KEY = "linbao-birthday-planet-access";
+const GATE_OPENED_KEY = "linbao-gate-opened";
 const ACCESS_CODE = "0608";
+const BIRTHDAY_GATE_OPEN_AT = Date.UTC(2026, 5, 9, 16, 0, 0);
 const BURST_LIFETIME = 1800;
 const WEDDING_RIDDLE_ANSWER = "2025年2月7日";
 const WEDDING_RIDDLE_ACCEPTED_DIGITS = new Set(["202527", "20250207"]);
@@ -500,6 +502,23 @@ function readStoredNumber(key: string) {
 
   const value = storage.getItem(key);
   return value ? Number(value) : null;
+}
+
+function isBirthdayGateOpen(now = Date.now()) {
+  return now >= BIRTHDAY_GATE_OPEN_AT;
+}
+
+function getBirthdayGateRemaining(now = Date.now()) {
+  return Math.max(0, BIRTHDAY_GATE_OPEN_AT - now);
+}
+
+function formatBirthdayGateRemaining(remaining: number) {
+  const totalSeconds = Math.ceil(remaining / 1000);
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+
+  return `${String(hours).padStart(2, "0")}小时 ${String(minutes).padStart(2, "0")}分钟 ${String(seconds).padStart(2, "0")}秒`;
 }
 
 function readStoredMystery() {
@@ -1985,14 +2004,41 @@ function BurstLayer({ bursts }: { bursts: Burst[] }) {
 function BirthdayAccessGate({ onUnlock }: { onUnlock: () => void }) {
   const [code, setCode] = useState("");
   const [hasError, setHasError] = useState(false);
+  const [secretClicks, setSecretClicks] = useState(0);
+  const [secretVisible, setSecretVisible] = useState(false);
+  const [remaining, setRemaining] = useState(() => getBirthdayGateRemaining());
+  const isOpen = remaining <= 0;
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setRemaining(getBirthdayGateRemaining());
+    }, 1000);
+
+    return () => window.clearInterval(timer);
+  }, []);
+
+  function unlockGate() {
+    getStorage()?.setItem(GATE_OPENED_KEY, "true");
+    getStorage()?.setItem(ACCESS_KEY, "unlocked");
+    setHasError(false);
+    onUnlock();
+  }
+
+  function revealSecretEntry() {
+    setSecretClicks((current) => {
+      const next = current + 1;
+      if (next >= 5) {
+        setSecretVisible(true);
+      }
+      return next;
+    });
+  }
 
   function submitAccessCode(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     if (code.trim() === ACCESS_CODE) {
-      getStorage()?.setItem(ACCESS_KEY, "unlocked");
-      setHasError(false);
-      onUnlock();
+      unlockGate();
       return;
     }
 
@@ -2009,30 +2055,66 @@ function BirthdayAccessGate({ onUnlock }: { onUnlock: () => void }) {
         <span className="access-orbit access-orbit-two" />
       </div>
 
-      <form className="birthday-access-card" onSubmit={submitAccessCode}>
+      <div className="birthday-access-card">
         <p className="eyebrow">private birthday planet</p>
-        <h1>琳宝的生日星球正在准备中</h1>
-        <label htmlFor="birthday-access-code">请输入暗号进入</label>
-        <div className={classNames("birthday-access-row", hasError && "has-error")}>
-          <input
-            autoComplete="off"
-            id="birthday-access-code"
-            inputMode="numeric"
-            maxLength={8}
-            onChange={(event) => {
-              setCode(event.target.value);
-              setHasError(false);
-            }}
-            placeholder="暗号"
-            type="text"
-            value={code}
-          />
-          <button type="submit">进入</button>
+        <button className="birthday-access-title-button" onClick={revealSecretEntry} type="button">
+          <h1>琳宝的生日星球正在准备中</h1>
+        </button>
+        <p className="birthday-access-subtitle">等零点一到，这片小宇宙就会自己为你打开。</p>
+
+        <div className={classNames("birthday-countdown-panel", isOpen && "is-open")}>
+          {isOpen ? (
+            <>
+              <p className="birthday-countdown-label">生日快乐，琳宝。</p>
+              <strong>星球已经为你打开。</strong>
+              <button className="birthday-gate-enter-button" onClick={unlockGate} type="button">
+                进入礼物星球
+              </button>
+            </>
+          ) : (
+            <>
+              <p className="birthday-countdown-label">距离生日星球开启还有</p>
+              <strong>{formatBirthdayGateRemaining(remaining)}</strong>
+              <span>星轨正在慢慢亮起，等北京时间零点，它就会打开。</span>
+            </>
+          )}
         </div>
+
+        <form
+          className={classNames("birthday-secret-form", secretVisible && "is-visible")}
+          onSubmit={submitAccessCode}
+          aria-hidden={!secretVisible}
+        >
+          <label htmlFor="birthday-access-code">备用测试暗号</label>
+          <div className={classNames("birthday-access-row", hasError && "has-error")}>
+            <input
+              autoComplete="off"
+              id="birthday-access-code"
+              inputMode="numeric"
+              maxLength={8}
+              onChange={(event) => {
+                setCode(event.target.value);
+                setHasError(false);
+              }}
+              placeholder="备用暗号"
+              tabIndex={secretVisible ? 0 : -1}
+              type="text"
+              value={code}
+            />
+            <button tabIndex={secretVisible ? 0 : -1} type="submit">
+              提前进入
+            </button>
+          </div>
+        </form>
+
         <p className="birthday-access-hint" aria-live="polite">
-          {hasError ? "暗号不对，再想想和生日有关的数字。" : "暗夜星光已经亮起，等你输入正确暗号。"}
+          {hasError
+            ? "暗号不对，再想想和生日有关的数字。"
+            : secretVisible
+              ? "这是 Long 留给自己测试的小入口。"
+              : "生日星球会在北京时间 2026 年 6 月 10 日 00:00 打开。"}
         </p>
-      </form>
+      </div>
     </section>
   );
 }
@@ -2065,7 +2147,13 @@ export function GiftExperience() {
   const burstTimersRef = useRef<number[]>([]);
 
   useEffect(() => {
-    setAccessGranted(getStorage()?.getItem(ACCESS_KEY) === "unlocked");
+    const storage = getStorage();
+    const storedGateOpened = storage?.getItem(GATE_OPENED_KEY) === "true" || storage?.getItem(ACCESS_KEY) === "unlocked";
+    setAccessGranted(storedGateOpened);
+    if (storedGateOpened) {
+      setHasOpened(true);
+      setIntroStage("opening");
+    }
     setAccessChecked(true);
     setLotteryAmount(readStoredNumber(LOTTERY_KEY));
     setMysteryResult(readStoredMystery());
@@ -2410,7 +2498,15 @@ export function GiftExperience() {
   }
 
   if (!accessGranted) {
-    return <BirthdayAccessGate onUnlock={() => setAccessGranted(true)} />;
+    return (
+      <BirthdayAccessGate
+        onUnlock={() => {
+          setAccessGranted(true);
+          setHasOpened(true);
+          setIntroStage("opening");
+        }}
+      />
+    );
   }
 
   return (
