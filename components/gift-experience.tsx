@@ -2007,6 +2007,7 @@ function BirthdayAccessGate({ onUnlock }: { onUnlock: () => void }) {
   const [secretClicks, setSecretClicks] = useState(0);
   const [secretVisible, setSecretVisible] = useState(false);
   const [remaining, setRemaining] = useState(() => getBirthdayGateRemaining());
+  const secretClicksRef = useRef(0);
   const isOpen = remaining <= 0;
 
   useEffect(() => {
@@ -2025,13 +2026,16 @@ function BirthdayAccessGate({ onUnlock }: { onUnlock: () => void }) {
   }
 
   function revealSecretEntry() {
-    setSecretClicks((current) => {
-      const next = current + 1;
-      if (next >= 5) {
-        setSecretVisible(true);
-      }
-      return next;
-    });
+    const next = secretClicksRef.current + 1;
+    secretClicksRef.current = next;
+    setSecretClicks(next);
+
+    if (next >= 5) {
+      secretClicksRef.current = 0;
+      setSecretClicks(0);
+      setSecretVisible(false);
+      unlockGate();
+    }
   }
 
   function submitAccessCode(event: FormEvent<HTMLFormElement>) {
