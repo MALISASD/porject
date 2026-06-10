@@ -90,6 +90,9 @@ const COUPON_PACK_KEY = "linbao-giftbox-coupon-pack";
 const MESSAGE_KEY = "linbao-giftbox-message";
 const ACCESS_KEY = "linbao-birthday-planet-access";
 const GATE_OPENED_KEY = "linbao-gate-opened";
+const TEST_ACCESS_KEY = "linbao-test-access";
+const CAKE_UNLOCKED_KEY = "linbao-cake-unlocked";
+const LEGACY_CAKE_OPENED_KEY = "linbao-birthday-cake-opened";
 const ACCESS_CODE = "0608";
 const BIRTHDAY_GATE_OPEN_AT = Date.UTC(2026, 5, 9, 16, 0, 0);
 const BURST_LIFETIME = 1800;
@@ -512,6 +515,18 @@ function getBirthdayGateRemaining(now = Date.now()) {
   return Math.max(0, BIRTHDAY_GATE_OPEN_AT - now);
 }
 
+function hasStoredGateAccess(storage: Storage | null) {
+  return (
+    storage?.getItem(GATE_OPENED_KEY) === "true" ||
+    storage?.getItem(TEST_ACCESS_KEY) === "true" ||
+    storage?.getItem(ACCESS_KEY) === "unlocked"
+  );
+}
+
+function hasStoredCakeUnlock(storage: Storage | null) {
+  return storage?.getItem(CAKE_UNLOCKED_KEY) === "true" || storage?.getItem(LEGACY_CAKE_OPENED_KEY) === "true";
+}
+
 function formatBirthdayGateRemaining(remaining: number) {
   const totalSeconds = Math.ceil(remaining / 1000);
   const hours = Math.floor(totalSeconds / 3600);
@@ -665,6 +680,16 @@ function normalizeWeddingAnswer(value: string) {
   return value
     .replace(/[０-９]/g, (char) => String.fromCharCode(char.charCodeAt(0) - 0xfee0))
     .replace(/\D/g, "");
+}
+
+function isWeddingAnswerAccepted(value: string) {
+  const compact = value.trim().replace(/\s/g, "");
+
+  return (
+    compact.includes("大年初十") ||
+    compact.includes("正月初十") ||
+    WEDDING_RIDDLE_ACCEPTED_DIGITS.has(normalizeWeddingAnswer(value))
+  );
 }
 
 function ParticleDigit({ value }: { value: CountdownValue }) {
@@ -2021,8 +2046,12 @@ function BirthdayAccessGate({ onUnlock }: { onUnlock: () => void }) {
   }, []);
 
   function unlockGate() {
-    getStorage()?.setItem(GATE_OPENED_KEY, "true");
-    getStorage()?.setItem(ACCESS_KEY, "unlocked");
+    const storage = getStorage();
+    storage?.setItem(GATE_OPENED_KEY, "true");
+    storage?.setItem(ACCESS_KEY, "unlocked");
+    if (previewOpen) {
+      storage?.setItem(TEST_ACCESS_KEY, "true");
+    }
     setHasError(false);
     onUnlock();
   }
@@ -2031,6 +2060,10 @@ function BirthdayAccessGate({ onUnlock }: { onUnlock: () => void }) {
     const next = secretClicksRef.current + 1;
     secretClicksRef.current = next;
     setSecretClicks(next);
+
+    if (next >= 4) {
+      setSecretVisible(true);
+    }
 
     if (next >= 5) {
       secretClicksRef.current = 0;
@@ -2073,7 +2106,10 @@ function BirthdayAccessGate({ onUnlock }: { onUnlock: () => void }) {
       </div>
 
       <div className="birthday-access-card">
-        <p className="eyebrow">private birthday planet</p>
+        <div className="birthday-access-topline">
+          <p className="eyebrow">private birthday planet</p>
+          <MusicButton className="birthday-access-music" />
+        </div>
         <button
           className="birthday-access-title-button"
           onClick={handleSecretTitleTap}
@@ -2172,12 +2208,23 @@ export function GiftExperience() {
 
   useEffect(() => {
     const storage = getStorage();
-    const storedGateOpened = storage?.getItem(GATE_OPENED_KEY) === "true" || storage?.getItem(ACCESS_KEY) === "unlocked";
-    setAccessGranted(storedGateOpened);
-    if (storedGateOpened) {
+    const gateOpened = isBirthdayGateOpen() || hasStoredGateAccess(storage);
+    const cakeUnlocked = hasStoredCakeUnlock(storage);
+
+    setAccessGranted(gateOpened);
+    setWeddingRiddleSolved(cakeUnlocked);
+
+    if (gateOpened && cakeUnlocked) {
       setHasOpened(true);
       setIntroStage("opening");
+    } else if (gateOpened) {
+      setHasOpened(false);
+      setIntroStage("cake");
+    } else {
+      setHasOpened(false);
+      setIntroStage("cover");
     }
+
     setAccessChecked(true);
     setLotteryAmount(readStoredNumber(LOTTERY_KEY));
     setMysteryResult(readStoredMystery());
@@ -2186,12 +2233,6 @@ export function GiftExperience() {
     const storedMessage = readStoredMessage();
     setSavedMessage(storedMessage);
     setMessageDraft(storedMessage);
-
-    const params = new URLSearchParams(window.location.search);
-    if (params.get("open") === "planet") {
-      setHasOpened(true);
-      setIntroStage("opening");
-    }
   }, []);
 
   useEffect(() => {
@@ -2294,6 +2335,8 @@ export function GiftExperience() {
 
     setIntroStage("opening");
     setIntroOpening(true);
+    getStorage()?.setItem(CAKE_UNLOCKED_KEY, "true");
+    getStorage()?.setItem(LEGACY_CAKE_OPENED_KEY, "true");
 
     // Stage 1: plush press and first tiny petals (520ms)
     const s1Timer = window.setTimeout(() => {
@@ -2342,9 +2385,9 @@ export function GiftExperience() {
       return;
     }
 
-    const normalized = normalizeWeddingAnswer(weddingAnswer);
-
-    if (WEDDING_RIDDLE_ACCEPTED_DIGITS.has(normalized)) {
+    if (isWeddingAnswerAccepted(weddingAnswer)) {
+      getStorage()?.setItem(CAKE_UNLOCKED_KEY, "true");
+      getStorage()?.setItem(LEGACY_CAKE_OPENED_KEY, "true");
       setWeddingAnswer(WEDDING_RIDDLE_ANSWER);
       setWeddingRiddleSolved(true);
       setWeddingRiddleError(false);
@@ -2525,9 +2568,12 @@ export function GiftExperience() {
     return (
       <BirthdayAccessGate
         onUnlock={() => {
+          const cakeUnlocked = hasStoredCakeUnlock(getStorage());
+
           setAccessGranted(true);
-          setHasOpened(true);
-          setIntroStage("opening");
+          setWeddingRiddleSolved(cakeUnlocked);
+          setHasOpened(cakeUnlocked);
+          setIntroStage(cakeUnlocked ? "opening" : "cake");
         }}
       />
     );
